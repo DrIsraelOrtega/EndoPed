@@ -10,10 +10,33 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap');
         
+        :root {
+            --bg-overlay-light: rgba(245, 245, 244, 0.6);
+            --bg-overlay-dark: rgba(245, 245, 244, 0.8);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #1c1917; /* stone-900 */
+            --text-secondary: #57534e; /* stone-600 */
+            --header-bg: rgba(255, 255, 255, 0.9);
+            --border-color: #e7e5e4;
+        }
+
+        /* --- VARIABLES MODO OSCURO --- */
+        body.dark-mode {
+            --bg-overlay-light: rgba(15, 23, 42, 0.7); /* Slate 900 tint */
+            --bg-overlay-dark: rgba(15, 23, 42, 0.85);
+            --card-bg: rgba(30, 41, 59, 0.95); /* Slate 800 */
+            --text-main: #f3f4f6; /* gray-100 */
+            --text-secondary: #cbd5e1; /* slate-300 */
+            --header-bg: rgba(15, 23, 42, 0.95);
+            --border-color: #334155;
+        }
+
         body {
             font-family: 'Reddit Sans', sans-serif;
             background-color: #f5f5f4;
+            color: var(--text-main);
             overflow-x: hidden;
+            transition: color 0.3s ease;
         }
 
         /* --- FONDO DINÁMICO (PARALLAX) --- */
@@ -24,12 +47,20 @@
             width: 120%;
             height: 120%;
             z-index: -1;
-            background: linear-gradient(to bottom, rgba(245, 245, 244, 0.6), rgba(245, 245, 244, 0.8)),
-                        url('https://images.unsplash.com/photo-1569428034239-f9565e32e224?q=80&w=1979&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            transition: transform 0.1s ease-out;
+            transition: transform 0.1s ease-out, background-image 0.5s ease;
             will-change: transform;
+            
+            /* FONDO POR DEFECTO (DÍA - NUBES) */
+            background-image: linear-gradient(to bottom, var(--bg-overlay-light), var(--bg-overlay-dark)),
+                              url('https://images.unsplash.com/photo-1569428034239-f9565e32e224?q=80&w=1979&auto=format&fit=crop');
+        }
+
+        /* FONDO MODO OSCURO (NOCHE - ESTRELLAS) */
+        body.dark-mode #dynamic-bg {
+            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.95)),
+                              url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2070&auto=format&fit=crop');
         }
 
         h1, h2, h3, .font-display {
@@ -37,20 +68,59 @@
             letter-spacing: 0.05em;
         }
 
+        /* TÍTULOS Y TEXTOS ADAPTABLES */
+        h1, h2, h3 { color: var(--text-main) !important; }
+        p, span, i { color: inherit; } /* Heredar para facilitar cambios */
+        
+        /* Excepciones específicas para mantener colores de semáforo/badges */
+        .text-blue-600, .text-blue-700, .text-blue-500 { color: #2563eb !important; }
+        body.dark-mode .text-blue-600, body.dark-mode .text-blue-700 { color: #60a5fa !important; } /* Lighter blue in dark mode */
+        
+        .text-red-600, .text-red-700, .text-red-800 { color: #dc2626 !important; }
+        body.dark-mode .text-red-600, body.dark-mode .text-red-700, body.dark-mode .text-red-800 { color: #f87171 !important; }
+
+        .text-emerald-600, .text-emerald-700, .text-emerald-800 { color: #059669 !important; }
+        body.dark-mode .text-emerald-600, body.dark-mode .text-emerald-700, body.dark-mode .text-emerald-800 { color: #34d399 !important; }
+
+        /* HEADER Y CARDS ADAPTABLES */
+        header {
+            background-color: var(--header-bg) !important;
+            border-bottom-color: var(--border-color) !important;
+        }
+
         .card-shadow {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            background-color: rgba(255, 255, 255, 0.95); 
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+            background-color: var(--card-bg);
             backdrop-filter: blur(5px);
+            border: 1px solid var(--border-color);
         }
 
         .card-shadow:hover {
             transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            border-color: #60a5fa; /* Resalte azul al hover */
         }
 
+        /* Ajustes específicos para textos secundarios en modo oscuro */
+        body.dark-mode .text-stone-500, 
+        body.dark-mode .text-stone-600,
+        body.dark-mode .text-stone-700 {
+            color: var(--text-secondary) !important;
+        }
+
+        /* Badges de fondo en modo oscuro (hacerlos un poco más oscuros) */
+        body.dark-mode .bg-blue-100 { background-color: rgba(30, 58, 138, 0.5); color: #bfdbfe !important; }
+        body.dark-mode .bg-orange-100 { background-color: rgba(124, 45, 18, 0.5); color: #fed7aa !important; }
+        body.dark-mode .bg-emerald-100 { background-color: rgba(6, 78, 59, 0.5); color: #a7f3d0 !important; }
+        body.dark-mode .bg-red-100 { background-color: rgba(127, 29, 29, 0.5); color: #fecaca !important; }
+        body.dark-mode .bg-rose-100 { background-color: rgba(136, 19, 55, 0.5); color: #fecdd3 !important; }
+        body.dark-mode .bg-purple-100 { background-color: rgba(88, 28, 135, 0.5); color: #e9d5ff !important; }
+        body.dark-mode .bg-stone-100 { background-color: rgba(51, 65, 85, 0.5); color: #e2e8f0 !important; }
+        body.dark-mode .bg-stone-50 { background-color: rgba(15, 23, 42, 0.5); border-color: #334155; }
+        
         .modal-overlay {
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(4px);
         }
 
@@ -62,6 +132,15 @@
                 #7f1d1d 80%
             );
         }
+
+        /* Botón Toggle Theme */
+        #theme-toggle {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        #theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
     </style>
 </head>
 <body class="text-stone-800 antialiased pb-12">
@@ -69,15 +148,15 @@
     <div id="dynamic-bg"></div>
 
     <div id="contact-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-8 text-center card-shadow border-t-8 border-stone-800">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-sm w-full p-8 text-center card-shadow border-t-8 border-stone-800">
             <div class="w-20 h-20 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 text-stone-600">
                 <i class="fas fa-user-md text-4xl"></i>
             </div>
-            <h3 class="text-2xl text-stone-900 mb-1">Dra. Dulce Maria Granados</h3>
+            <h3 class="text-2xl mb-1">Dra. Dulce Maria Granados</h3>
             <p class="text-stone-600 font-semibold mb-1">Endocrinóloga Pediatra</p>
             <p class="text-stone-500 text-sm mb-6">HCG</p>
             <div class="space-y-3">
-                <button onclick="closeModal()" class="w-full py-3 bg-stone-900 text-white rounded-xl font-bold hover:bg-stone-800 transition">
+                <button onclick="closeModal()" class="w-full py-3 bg-stone-900 text-white rounded-xl font-bold hover:bg-stone-700 transition">
                     Cerrar
                 </button>
             </div>
@@ -87,16 +166,20 @@
     <header class="bg-white/90 backdrop-blur-md border-b border-stone-200 sticky top-0 z-50 transition-all">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="bg-stone-900 text-white p-2 rounded-lg">
+                <div class="bg-stone-900 text-white p-2 rounded-lg shadow-lg">
                     <i class="fas fa-utensils text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl text-stone-900 leading-tight">Portal Nutricional <span class="text-blue-600">DT1</span></h1>
+                    <h1 class="text-2xl leading-tight">Portal Nutricional <span class="text-blue-600">DT1</span></h1>
                     <p class="text-xs text-stone-500 font-sans">Hospital Civil de Guadalajara, Fray Antonio Alcalde</p>
                 </div>
             </div>
-            <nav class="hidden md:flex gap-6 text-sm">
-                <button onclick="openModal()" class="text-blue-600 hover:text-blue-800 transition-colors font-bold">
+            <nav class="flex gap-4 text-sm items-center">
+                <button id="theme-toggle" onclick="toggleTheme()" class="p-2 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 transition-colors shadow-sm" aria-label="Cambiar Tema">
+                    <i class="fas fa-moon text-xl" id="theme-icon"></i>
+                </button>
+
+                <button onclick="openModal()" class="hidden md:flex text-blue-600 hover:text-blue-800 transition-colors font-bold items-center">
                     <i class="fas fa-user-md mr-1"></i> Contacto Médico
                 </button>
             </nav>
@@ -106,39 +189,39 @@
     <main class="max-w-6xl mx-auto px-4 mt-12 space-y-10">
 
         <section class="text-center max-w-3xl mx-auto mb-10">
-            <span class="px-3 py-1 bg-stone-200/80 backdrop-blur-sm text-stone-700 rounded-full text-xs font-bold uppercase tracking-wide mb-4 inline-block font-sans">Menú Inteligente</span>
-            <h2 class="text-5xl text-stone-800 mb-4 tracking-wide drop-shadow-sm">Selecciona tu Platillo</h2>
-            <p class="text-lg text-stone-700 leading-relaxed mb-6 font-medium">
+            <span class="px-3 py-1 bg-stone-200/80 backdrop-blur-sm text-stone-700 rounded-full text-xs font-bold uppercase tracking-wide mb-4 inline-block font-sans shadow-sm">Menú Inteligente</span>
+            <h2 class="text-5xl mb-4 tracking-wide drop-shadow-sm">Selecciona tu Platillo</h2>
+            <p class="text-lg text-stone-600 leading-relaxed mb-6 font-medium">
                 Explora opciones deliciosas diseñadas para mantenerte en control sin sacrificar el sabor.
             </p>
 
-            <button onclick="toggleEmergency()" class="group inline-flex items-center gap-2 px-6 py-3 bg-red-50 text-red-700 font-bold rounded-full border border-red-200 hover:bg-red-100 transition-all shadow-sm">
+            <button onclick="toggleEmergency()" class="group inline-flex items-center gap-2 px-6 py-3 bg-red-50 text-red-700 font-bold rounded-full border border-red-200 hover:bg-red-100 transition-all shadow-md hover:shadow-lg">
                 <i class="fas fa-exclamation-triangle text-red-500 animate-pulse"></i>
                 <span class="font-display text-lg">🆘 Semáforo de Alerta</span>
                 <i id="chevron-icon" class="fas fa-chevron-down text-sm transition-transform duration-300"></i>
             </button>
         </section>
 
-        <section id="emergency-guide" class="hidden max-w-4xl mx-auto mb-16 bg-white/95 backdrop-blur rounded-2xl border-l-8 border-red-500 card-shadow overflow-hidden transition-all duration-500">
+        <section id="emergency-guide" class="hidden max-w-4xl mx-auto mb-16 card-shadow rounded-2xl border-l-8 border-red-500 overflow-hidden transition-all duration-500">
             <div class="p-8">
-                <h3 class="text-3xl text-stone-800 mb-2">Protocolo de Acción Rápida</h3>
+                <h3 class="text-3xl mb-2">Protocolo de Acción Rápida</h3>
                 <p class="text-stone-500 text-sm mb-8">Identifica tu nivel de glucosa actual y sigue las instrucciones.</p>
-                <div class="relative h-12 w-full rounded-full glucose-gradient mb-4 shadow-inner">
+                <div class="relative h-12 w-full rounded-full glucose-gradient mb-4 shadow-inner border border-stone-200">
                     <div class="absolute w-full -top-6 flex text-xs font-bold text-stone-400 font-sans">
-                        <span style="width: 15%" class="text-center text-red-600">Bajo</span>
-                        <span style="width: 45%" class="text-center text-emerald-600">Meta</span>
-                        <span style="width: 20%" class="text-center text-amber-600">Alto</span>
-                        <span style="width: 20%" class="text-center text-red-800">Peligro</span>
+                        <span style="width: 15%" class="text-center text-red-600 font-black">Bajo</span>
+                        <span style="width: 45%" class="text-center text-emerald-600 font-black">Meta</span>
+                        <span style="width: 20%" class="text-center text-amber-600 font-black">Alto</span>
+                        <span style="width: 20%" class="text-center text-red-800 font-black">Peligro</span>
                     </div>
                 </div>
                 <div class="flex justify-between text-xs font-mono text-stone-400 mb-8 px-1">
                     <span>0</span><span>70</span><span>180</span><span>250</span><span>400+</span>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="bg-red-50 p-4 rounded-xl border border-red-100"><h4 class="text-red-800 font-bold">Hipoglucemia</h4><p class="text-xs text-red-600">&lt; 70 mg/dL: Comer 15g azúcar.</p></div>
-                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100"><h4 class="text-emerald-800 font-bold">En Rango</h4><p class="text-xs text-emerald-600">70-180 mg/dL: Todo OK.</p></div>
-                    <div class="bg-amber-50 p-4 rounded-xl border border-amber-100"><h4 class="text-amber-800 font-bold">Elevado</h4><p class="text-xs text-amber-600">180-250 mg/dL: Corregir + Agua.</p></div>
-                    <div class="bg-stone-800 p-4 rounded-xl border border-stone-900 text-white"><h4 class="text-red-400 font-bold">Peligro</h4><p class="text-xs text-gray-300">> 250 + Cetonas: Urgencias.</p></div>
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-100 shadow-sm"><h4 class="text-red-800 font-bold">Hipoglucemia</h4><p class="text-xs text-red-600 font-medium">&lt; 70 mg/dL: Comer 15g azúcar.</p></div>
+                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 shadow-sm"><h4 class="text-emerald-800 font-bold">En Rango</h4><p class="text-xs text-emerald-600 font-medium">70-180 mg/dL: Todo OK.</p></div>
+                    <div class="bg-amber-50 p-4 rounded-xl border border-amber-100 shadow-sm"><h4 class="text-amber-800 font-bold">Elevado</h4><p class="text-xs text-amber-600 font-medium">180-250 mg/dL: Corregir + Agua.</p></div>
+                    <div class="bg-stone-800 p-4 rounded-xl border border-stone-900 text-white shadow-sm"><h4 class="text-red-400 font-bold">Peligro</h4><p class="text-xs text-gray-300 font-medium">> 250 + Cetonas: Urgencias.</p></div>
                 </div>
             </div>
         </section>
@@ -146,23 +229,25 @@
         <section class="grid grid-cols-1 md:grid-cols-3 gap-8">
             
             <a href="power_burger.html" class="block group">
-                <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100/50 hover:border-blue-300 transition-all">
-                    <div class="h-40 bg-blue-50/80 flex items-center justify-center group-hover:bg-blue-100/80 transition-colors">
-                        <i class="fas fa-hamburger text-6xl text-blue-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md"></i>
+                <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col hover:border-blue-400 transition-all">
+                    <div class="h-40 bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors relative overflow-hidden">
+                        <div class="absolute inset-0 bg-blue-200 opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                        <i class="fas fa-hamburger text-6xl text-blue-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md z-10"></i>
                     </div>
                     <div class="p-5 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl text-stone-800 group-hover:text-blue-600 transition-colors">Power Burger</h3>
-                            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded font-sans">COMIDA</span>
+                            <h3 class="text-2xl group-hover:text-blue-600 transition-colors">Power Burger</h3>
+                            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded font-sans uppercase">Comida</span>
                         </div>
                         <p class="text-stone-600 text-sm mb-4 leading-snug">
                             ¡La burger que sí puedes comer! Olvídate de la culpa y aprende a dominar el efecto de la carne y el queso en tu glucosa.
                         </p>
-                        <div class="mt-auto bg-stone-50 rounded-lg p-2 border border-stone-100 space-y-1 text-sm">
+                        <div class="mt-auto bg-stone-50 rounded-lg p-3 border border-stone-100 space-y-1 text-sm shadow-inner">
                             <div class="flex justify-between text-stone-500"><span>Proteína:</span> <span class="font-semibold">47g</span></div>
                             <div class="flex justify-between text-stone-500"><span>Grasas:</span> <span class="font-semibold">33g</span></div>
-                            <div class="flex justify-between text-blue-600 font-bold bg-blue-50 px-2 rounded-md">
-                                <span>Carbohidratos:</span> <span>30g</span>
+                            <div class="flex justify-between items-center bg-white border border-blue-100 px-2 py-1 rounded-md mt-1">
+                                <span class="text-blue-600 font-bold text-xs">CARBOHIDRATOS</span> 
+                                <span class="text-blue-700 font-black text-lg">30g</span>
                             </div>
                         </div>
                     </div>
@@ -170,23 +255,25 @@
             </a>
 
             <a href="pan_avena.html" class="block group">
-                <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100/50 hover:border-orange-300 transition-all">
-                    <div class="h-40 bg-orange-50/80 flex items-center justify-center group-hover:bg-orange-100/80 transition-colors">
-                        <i class="fas fa-bread-slice text-6xl text-orange-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md"></i>
+                <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col hover:border-orange-400 transition-all">
+                    <div class="h-40 bg-orange-50 flex items-center justify-center group-hover:bg-orange-100 transition-colors relative overflow-hidden">
+                        <div class="absolute inset-0 bg-orange-200 opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                        <i class="fas fa-bread-slice text-6xl text-orange-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md z-10"></i>
                     </div>
                     <div class="p-5 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl text-stone-800 group-hover:text-orange-600 transition-colors">Pan de Avena</h3>
-                            <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-1 rounded font-sans">DESAYUNO</span>
+                            <h3 class="text-2xl group-hover:text-orange-600 transition-colors">Pan de Avena</h3>
+                            <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-1 rounded font-sans uppercase">Desayuno</span>
                         </div>
                         <p class="text-stone-600 text-sm mb-4 leading-snug">
                             ¿Harto de la avena aburrida? Este pan esponjoso te da energía estable toda la mañana sin esos picos locos.
                         </p>
-                        <div class="mt-auto bg-stone-50 rounded-lg p-2 border border-stone-100 space-y-1 text-sm">
+                        <div class="mt-auto bg-stone-50 rounded-lg p-3 border border-stone-100 space-y-1 text-sm shadow-inner">
                             <div class="flex justify-between text-stone-500"><span>Proteína:</span> <span class="font-semibold">11g</span></div>
                             <div class="flex justify-between text-stone-500"><span>Grasas:</span> <span class="font-semibold">12g</span></div>
-                            <div class="flex justify-between text-orange-600 font-bold bg-orange-50 px-2 rounded-md">
-                                <span>Carbohidratos:</span> <span>17g</span>
+                            <div class="flex justify-between items-center bg-white border border-orange-100 px-2 py-1 rounded-md mt-1">
+                                <span class="text-orange-600 font-bold text-xs">CARBOHIDRATOS</span> 
+                                <span class="text-orange-700 font-black text-lg">17g</span>
                             </div>
                         </div>
                     </div>
@@ -194,23 +281,25 @@
             </a>
 
             <a href="bowl_inteligente.html" class="block group">
-                <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100/50 hover:border-emerald-300 transition-all">
-                    <div class="h-40 bg-emerald-50/80 flex items-center justify-center group-hover:bg-emerald-100/80 transition-colors">
-                        <i class="fas fa-leaf text-6xl text-emerald-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md"></i>
+                <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col hover:border-emerald-400 transition-all">
+                    <div class="h-40 bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-100 transition-colors relative overflow-hidden">
+                        <div class="absolute inset-0 bg-emerald-200 opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                        <i class="fas fa-leaf text-6xl text-emerald-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md z-10"></i>
                     </div>
                     <div class="p-5 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl text-stone-800 group-hover:text-emerald-600 transition-colors">Bowl Inteligente</h3>
-                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded font-sans">COLACIÓN</span>
+                            <h3 class="text-2xl group-hover:text-emerald-600 transition-colors">Bowl Inteligente</h3>
+                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded font-sans uppercase">Colación</span>
                         </div>
                         <p class="text-stone-600 text-sm mb-4 leading-snug">
                             El hack definitivo para el hambre voraz. Volumen brutal, frescura máxima y tu glucosa ni se enterará.
                         </p>
-                        <div class="mt-auto bg-stone-50 rounded-lg p-2 border border-stone-100 space-y-1 text-sm">
+                        <div class="mt-auto bg-stone-50 rounded-lg p-3 border border-stone-100 space-y-1 text-sm shadow-inner">
                             <div class="flex justify-between text-stone-500"><span>Proteína:</span> <span class="font-semibold">5g</span></div>
                             <div class="flex justify-between text-stone-500"><span>Grasas:</span> <span class="font-semibold">8g</span></div>
-                            <div class="flex justify-between text-emerald-600 font-bold bg-emerald-50 px-2 rounded-md">
-                                <span>Carbohidratos:</span> <span>13g</span>
+                            <div class="flex justify-between items-center bg-white border border-emerald-100 px-2 py-1 rounded-md mt-1">
+                                <span class="text-emerald-600 font-bold text-xs">CARBOHIDRATOS</span> 
+                                <span class="text-emerald-700 font-black text-lg">13g</span>
                             </div>
                         </div>
                     </div>
@@ -218,23 +307,25 @@
             </a>
 
             <a href="lasagna_brocoli.html" class="block group">
-                <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100/50 hover:border-red-300 transition-all">
-                    <div class="h-40 bg-red-50/80 flex items-center justify-center group-hover:bg-red-100/80 transition-colors">
-                        <i class="fas fa-layer-group text-6xl text-red-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md"></i>
+                <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col hover:border-red-400 transition-all">
+                    <div class="h-40 bg-red-50 flex items-center justify-center group-hover:bg-red-100 transition-colors relative overflow-hidden">
+                        <div class="absolute inset-0 bg-red-200 opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                        <i class="fas fa-layer-group text-6xl text-red-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md z-10"></i>
                     </div>
                     <div class="p-5 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl text-stone-800 group-hover:text-red-600 transition-colors">Lasagna Brócoli</h3>
-                            <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded font-sans">COMIDA</span>
+                            <h3 class="text-2xl group-hover:text-red-600 transition-colors">Lasagna Brócoli</h3>
+                            <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded font-sans uppercase">Comida</span>
                         </div>
                         <p class="text-stone-600 text-sm mb-4 leading-snug">
                             Sabor italiano, modo stealth. Todo el queso y la carne que amas, pero sin la pasta que dispara tus niveles.
                         </p>
-                        <div class="mt-auto bg-stone-50 rounded-lg p-2 border border-stone-100 space-y-1 text-sm">
+                        <div class="mt-auto bg-stone-50 rounded-lg p-3 border border-stone-100 space-y-1 text-sm shadow-inner">
                             <div class="flex justify-between text-stone-500"><span>Proteína:</span> <span class="font-semibold">43g</span></div>
                             <div class="flex justify-between text-stone-500"><span>Grasas:</span> <span class="font-semibold">32g</span></div>
-                            <div class="flex justify-between text-red-600 font-bold bg-red-50 px-2 rounded-md">
-                                <span>Carbohidratos:</span> <span>12.5g</span>
+                            <div class="flex justify-between items-center bg-white border border-red-100 px-2 py-1 rounded-md mt-1">
+                                <span class="text-red-600 font-bold text-xs">CARBOHIDRATOS</span> 
+                                <span class="text-red-700 font-black text-lg">12.5g</span>
                             </div>
                         </div>
                     </div>
@@ -242,23 +333,25 @@
             </a>
 
             <a href="pizza_keto.html" class="block group">
-                <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100/50 hover:border-rose-300 transition-all">
-                    <div class="h-40 bg-rose-50/80 flex items-center justify-center group-hover:bg-rose-100/80 transition-colors">
-                        <i class="fas fa-pizza-slice text-6xl text-rose-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md"></i>
+                <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col hover:border-rose-400 transition-all">
+                    <div class="h-40 bg-rose-50 flex items-center justify-center group-hover:bg-rose-100 transition-colors relative overflow-hidden">
+                        <div class="absolute inset-0 bg-rose-200 opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                        <i class="fas fa-pizza-slice text-6xl text-rose-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md z-10"></i>
                     </div>
                     <div class="p-5 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl text-stone-800 group-hover:text-rose-600 transition-colors">Pizza Low-Carb</h3>
-                            <span class="bg-rose-100 text-rose-700 text-xs font-bold px-2 py-1 rounded font-sans">CENA</span>
+                            <h3 class="text-2xl group-hover:text-rose-600 transition-colors">Pizza Low-Carb</h3>
+                            <span class="bg-rose-100 text-rose-700 text-xs font-bold px-2 py-1 rounded font-sans uppercase">Cena</span>
                         </div>
                         <p class="text-stone-600 text-sm mb-4 leading-snug">
                             Cena épica sin el drama del amanecer alto. Base de almendra crujiente que desafía las reglas de la pizza.
                         </p>
-                        <div class="mt-auto bg-stone-50 rounded-lg p-2 border border-stone-100 space-y-1 text-sm">
+                        <div class="mt-auto bg-stone-50 rounded-lg p-3 border border-stone-100 space-y-1 text-sm shadow-inner">
                             <div class="flex justify-between text-stone-500"><span>Proteína:</span> <span class="font-semibold">32g</span></div>
                             <div class="flex justify-between text-stone-500"><span>Grasas:</span> <span class="font-semibold">38g</span></div>
-                            <div class="flex justify-between text-rose-600 font-bold bg-rose-50 px-2 rounded-md">
-                                <span>Carbohidratos:</span> <span>6g</span>
+                            <div class="flex justify-between items-center bg-white border border-rose-100 px-2 py-1 rounded-md mt-1">
+                                <span class="text-rose-600 font-bold text-xs">CARBOHIDRATOS</span> 
+                                <span class="text-rose-700 font-black text-lg">6g</span>
                             </div>
                         </div>
                     </div>
@@ -266,23 +359,25 @@
             </a>
 
             <a href="smoothie_cereales.html" class="block group">
-                <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100/50 hover:border-purple-300 transition-all">
-                    <div class="h-40 bg-purple-50/80 flex items-center justify-center group-hover:bg-purple-100/80 transition-colors">
-                        <i class="fas fa-blender text-6xl text-purple-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md"></i>
+                <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col hover:border-purple-400 transition-all">
+                    <div class="h-40 bg-purple-50 flex items-center justify-center group-hover:bg-purple-100 transition-colors relative overflow-hidden">
+                        <div class="absolute inset-0 bg-purple-200 opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                        <i class="fas fa-blender text-6xl text-purple-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md z-10"></i>
                     </div>
                     <div class="p-5 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-2xl text-stone-800 group-hover:text-purple-600 transition-colors">Smoothie Cereales</h3>
-                            <span class="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-1 rounded font-sans">COLACIÓN</span>
+                            <h3 class="text-2xl group-hover:text-purple-600 transition-colors">Smoothie Cereales</h3>
+                            <span class="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-1 rounded font-sans uppercase">Colación</span>
                         </div>
                         <p class="text-stone-600 text-sm mb-4 leading-snug">
                             Más que un licuado, es combustible inteligente. Cremoso, dulce y diseñado para que duermas tranquilo.
                         </p>
-                        <div class="mt-auto bg-stone-50 rounded-lg p-2 border border-stone-100 space-y-1 text-sm">
+                        <div class="mt-auto bg-stone-50 rounded-lg p-3 border border-stone-100 space-y-1 text-sm shadow-inner">
                             <div class="flex justify-between text-stone-500"><span>Proteína:</span> <span class="font-semibold">18g</span></div>
                             <div class="flex justify-between text-stone-500"><span>Grasas:</span> <span class="font-semibold">11g</span></div>
-                            <div class="flex justify-between text-purple-600 font-bold bg-purple-50 px-2 rounded-md">
-                                <span>Carbohidratos:</span> <span>28g</span>
+                            <div class="flex justify-between items-center bg-white border border-purple-100 px-2 py-1 rounded-md mt-1">
+                                <span class="text-purple-600 font-bold text-xs">CARBOHIDRATOS</span> 
+                                <span class="text-purple-700 font-black text-lg">28g</span>
                             </div>
                         </div>
                     </div>
@@ -341,7 +436,35 @@
             }
         }
 
-        // --- SCRIPT PARA EL FONDO DINÁMICO (PARALLAX) ---
+        /* --- SCRIPT MODO OSCURO --- */
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                icon.style.color = '#f59e0b'; // Amarillo sol
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                icon.style.color = '#57534e'; // Gris luna
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Cargar preferencia guardada
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                toggleTheme(); // Activa si estaba guardado
+            }
+        });
+
+        // --- SCRIPT FONDO DINÁMICO (PARALLAX) ---
         document.addEventListener('mousemove', (e) => {
             const bg = document.getElementById('dynamic-bg');
             const x = (window.innerWidth - e.pageX * 5) / 100;
