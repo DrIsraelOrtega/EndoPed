@@ -10,9 +10,28 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         
+        :root {
+            --bg-color: #f5f5f4;
+            --card-bg: #ffffff;
+            --text-main: #1c1917; /* stone-900 */
+            --text-muted: #57534e; /* stone-600 */
+            --border-color: #e5e7eb;
+        }
+
+        /* CONFIGURACIÓN MODO OSCURO */
+        body.dark-mode {
+            --bg-color: #0f172a; /* slate-900 */
+            --card-bg: #1e293b; /* slate-800 */
+            --text-main: #f3f4f6; /* gray-100 */
+            --text-muted: #cbd5e1; /* slate-300 */
+            --border-color: #334155;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f5f5f4;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .chart-container {
@@ -33,6 +52,8 @@
 
         .card-shadow {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
         }
 
         .interactive-row:hover {
@@ -40,11 +61,44 @@
             cursor: pointer;
             transition: background-color 0.2s ease;
         }
+        
+        /* Hover en modo oscuro */
+        body.dark-mode .interactive-row:hover {
+            background-color: rgba(251, 146, 60, 0.2);
+        }
 
         /* Modal styling */
         .modal-overlay {
             background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
+        }
+
+        /* ADAPTACIONES ESPECÍFICAS DE COLOR */
+        /* Textos */
+        h1, h2, h3, h4 { color: var(--text-main) !important; }
+        p, td { color: var(--text-muted); }
+        
+        /* Fondos y bordes específicos en modo oscuro */
+        body.dark-mode .bg-white { background-color: var(--card-bg); }
+        body.dark-mode .bg-stone-50 { background-color: #0f172a; border-color: #334155; }
+        
+        /* Tema Naranja en Dark Mode */
+        body.dark-mode .bg-orange-50 { background-color: rgba(124, 45, 18, 0.3); border-color: #7c2d12; }
+        body.dark-mode .text-orange-800 { color: #fdba74; } /* Naranja claro */
+        body.dark-mode .text-orange-600 { color: #fb923c; }
+        
+        /* Modal dark override */
+        body.dark-mode .bg-stone-100 { background-color: #334155; }
+        body.dark-mode .bg-stone-900 { background-color: #f8fafc; color: #0f172a; } /* Invertir botón modal */
+        body.dark-mode .bg-stone-900:hover { background-color: #e2e8f0; }
+
+        /* Botón de tema */
+        #theme-toggle {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        #theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
         }
     </style>
 </head>
@@ -66,10 +120,10 @@
         </div>
     </div>
 
-    <header class="bg-white border-b border-stone-200 sticky top-0 z-50">
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-50 transition-colors duration-300" id="main-header">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <a href="index.html" class="hover:bg-stone-100 p-2 rounded-lg transition">
+                <a href="index.html" class="hover:bg-stone-100 dark:hover:bg-slate-700 p-2 rounded-lg transition">
                     <i class="fas fa-arrow-left text-stone-400"></i>
                 </a>
 
@@ -81,10 +135,16 @@
                     <p class="text-xs text-stone-500">Dra. Meztli Sofía García Ruvalcaba PreMIP</p>
                 </div>
             </div>
-            <nav class="hidden md:flex gap-6 text-sm">
-                <button onclick="scrollToSection('ingredients')" class="hover:text-orange-600 transition-colors">Ingredientes</button>
-                <button onclick="scrollToSection('clinical')" class="hover:text-orange-600 transition-colors">Análisis Clínico</button>
-                <button onclick="scrollToSection('strategy')" class="hover:text-orange-600 transition-colors font-semibold text-orange-600">Estrategia Insulina</button>
+            <nav class="flex gap-4 text-sm items-center">
+                <button id="theme-toggle" onclick="toggleTheme()" class="p-2 rounded-full bg-stone-100 dark:bg-slate-700 hover:bg-stone-200 dark:hover:bg-slate-600 text-stone-600 dark:text-stone-300 transition-colors shadow-sm" aria-label="Cambiar Tema">
+                    <i class="fas fa-moon text-xl" id="theme-icon"></i>
+                </button>
+
+                <div class="hidden md:flex gap-6">
+                    <button onclick="scrollToSection('ingredients')" class="hover:text-orange-600 transition-colors">Ingredientes</button>
+                    <button onclick="scrollToSection('clinical')" class="hover:text-orange-600 transition-colors">Análisis Clínico</button>
+                    <button onclick="scrollToSection('strategy')" class="hover:text-orange-600 transition-colors font-semibold text-orange-600">Estrategia Insulina</button>
+                </div>
             </nav>
         </div>
     </header>
@@ -110,31 +170,31 @@
                     <div class="bg-orange-50 p-4 rounded-xl border border-orange-100">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-sm font-semibold text-orange-800">TOTALES (Aprox)</span>
-                            <span class="text-xs font-bold bg-white text-orange-600 px-2 py-1 rounded border border-orange-200">198 Kcal</span>
+                            <span class="text-xs font-bold bg-white dark:bg-slate-700 text-orange-600 px-2 py-1 rounded border border-orange-200 dark:border-orange-900">198 Kcal</span>
                         </div>
                         <div class="grid grid-cols-3 gap-4 text-center">
                             <div>
-                                <div class="text-2xl font-bold text-blue-600">10.5g</div>
-                                <div class="text-xs text-blue-800 uppercase font-semibold">Proteína</div>
+                                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">10.5g</div>
+                                <div class="text-xs text-blue-800 dark:text-blue-300 uppercase font-semibold">Proteína</div>
                             </div>
                             <div>
                                 <div class="text-2xl font-bold text-amber-500">12.1g</div>
-                                <div class="text-xs text-amber-700 uppercase font-semibold">Grasa</div>
+                                <div class="text-xs text-amber-700 dark:text-amber-300 uppercase font-semibold">Grasa</div>
                             </div>
                             <div>
                                 <div class="text-2xl font-bold text-emerald-500">17.0g</div>
-                                <div class="text-xs text-emerald-700 uppercase font-semibold">Carbos</div>
+                                <div class="text-xs text-emerald-700 dark:text-emerald-300 uppercase font-semibold">Carbos</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-stone-500 uppercase bg-stone-50 border-b">
+                            <thead class="text-xs text-stone-500 uppercase bg-stone-50 border-b dark:border-slate-700">
                                 <tr>
                                     <th class="px-4 py-3">Ingrediente</th>
                                     <th class="px-2 py-3 text-right">Kcal</th>
-                                    <th class="px-2 py-3 text-right font-bold text-emerald-600">HC</th>
+                                    <th class="px-2 py-3 text-right">HC</th>
                                 </tr>
                             </thead>
                             <tbody id="ingredients-table-body"></tbody>
@@ -190,8 +250,8 @@
                     </h3>
                 </div>
                 <div class="flex gap-2">
-                    <button id="btn-avena-trad" class="px-4 py-2 text-xs font-semibold rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200">Avena Cocida (Solo)</button>
-                    <button id="btn-pan-zanahoria" class="px-4 py-2 text-xs font-semibold rounded-full bg-orange-100 text-orange-700 border border-orange-200">Pan Zanahoria (Completo)</button>
+                    <button id="btn-avena-trad" class="px-4 py-2 text-xs font-semibold rounded-full bg-stone-100 dark:bg-slate-700 text-stone-600 dark:text-stone-300 hover:bg-stone-200 transition">Avena Cocida (Solo)</button>
+                    <button id="btn-pan-zanahoria" class="px-4 py-2 text-xs font-semibold rounded-full bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-200 border border-orange-200 dark:border-orange-800">Pan Zanahoria (Completo)</button>
                 </div>
             </div>
 
@@ -203,7 +263,7 @@
                 </div>
                 <div class="bg-orange-50 p-5 rounded-xl border border-orange-100 flex flex-col justify-center">
                     <h4 id="sim-title" class="text-lg font-bold text-orange-800 mb-2">Curva Estable</h4>
-                    <p id="sim-desc" class="text-sm text-orange-900 mb-4">
+                    <p id="sim-desc" class="text-sm text-orange-900 dark:text-orange-200 mb-4">
                         Observa cómo la proteína del huevo y la grasa del aceite "aplanan" la curva comparado con comer avena sola con agua.
                     </p>
                 </div>
@@ -213,20 +273,20 @@
         <section id="strategy" class="bg-gradient-to-br from-stone-800 to-stone-900 rounded-2xl card-shadow p-8 text-white">
             <div class="flex flex-col md:flex-row gap-8 items-center">
                 <div class="flex-1">
-                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-calculator mr-2"></i> Estrategia Sugerida</h2>
+                    <h2 class="text-2xl font-bold mb-4 !text-white"><i class="fas fa-calculator mr-2"></i> Estrategia Sugerida</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
-                            <h4 class="font-bold text-orange-300 mb-1">Pre-bolo Corto</h4>
-                            <p class="text-sm">Debido a la grasa y fibra, 10-15 minutos de pre-bolo suelen ser suficientes. No requiere tanta anticipación como la fruta o el jugo.</p>
+                            <h4 class="font-bold text-orange-300 mb-1 !text-orange-300">Pre-bolo Corto</h4>
+                            <p class="text-sm !text-gray-200">Debido a la grasa y fibra, 10-15 minutos de pre-bolo suelen ser suficientes.</p>
                         </div>
                         <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
-                            <h4 class="font-bold text-emerald-300 mb-1">Ratio Conservador</h4>
-                            <p class="text-sm">Al tener solo 17g HC, el error de cálculo es mínimo. Es un desayuno seguro para días de glucemias inestables.</p>
+                            <h4 class="font-bold text-emerald-300 mb-1 !text-emerald-300">Ratio Conservador</h4>
+                            <p class="text-sm !text-gray-200">Al tener solo 17g HC, el error de cálculo es mínimo.</p>
                         </div>
                     </div>
                 </div>
-                <div class="w-full md:w-1/3 bg-white text-stone-800 p-6 rounded-xl shadow-lg">
-                    <h4 class="font-bold border-b pb-2 mb-4 text-center">Consultar Experto</h4>
+                <div class="w-full md:w-1/3 bg-white text-stone-800 p-6 rounded-xl shadow-lg dark:bg-slate-800">
+                    <h4 class="font-bold border-b pb-2 mb-4 text-center dark:text-white">Consultar Experto</h4>
                     <button onclick="openModal()" class="w-full py-3 bg-orange-600 text-white rounded-xl font-bold text-sm hover:bg-orange-700 transition flex items-center justify-center gap-2">
                         <i class="fas fa-user-md"></i> Contactar Dra. Granados
                     </button>
@@ -237,7 +297,42 @@
     </main>
 
     <script>
-        // Datos extraídos de la imagen y completados con valores estándar USDA para Prot/Grasa
+        // --- LOGICA DE TEMA (MODO OSCURO) ---
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            const header = document.getElementById('main-header');
+            
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                icon.style.color = '#f59e0b'; // Amarillo sol
+                header.classList.add('dark:bg-slate-900', 'dark:border-slate-800');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                icon.style.color = '#57534e'; // Gris luna
+                header.classList.remove('dark:bg-slate-900', 'dark:border-slate-800');
+                localStorage.setItem('theme', 'light');
+            }
+            updateChartsTheme(); // Actualizar color de gráficas
+        }
+
+        // Cargar preferencia guardada
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                toggleTheme();
+            } else {
+                // Asegurar estado inicial correcto
+                updateChartsTheme();
+            }
+        });
+
+        // --- DATOS Y GRÁFICAS ---
         const ingredientsData = [
             { name: "Avena Cruda (1/3 taza)", kcal: 68, hc: 15, p: 4.0, f: 2.0 },
             { name: "Zanahoria (1/2 taza)", kcal: 12, hc: 2, p: 0.5, f: 0.1 },
@@ -268,43 +363,85 @@
             const tbody = document.getElementById('ingredients-table-body');
             ingredientsData.forEach(ing => {
                 const tr = document.createElement('tr');
-                tr.className = "border-b interactive-row";
+                tr.className = "border-b interactive-row dark:border-slate-700";
                 tr.innerHTML = `
-                    <td class="px-4 py-3 font-medium text-stone-700">${ing.name}</td>
+                    <td class="px-4 py-3 font-medium text-stone-700 dark:text-stone-300">${ing.name}</td>
                     <td class="px-2 py-3 text-right">${ing.kcal}</td>
-                    <td class="px-2 py-3 text-right font-bold text-emerald-600">${ing.hc}g</td>
+                    <td class="px-2 py-3 text-right font-bold text-emerald-600 dark:text-emerald-400">${ing.hc}g</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
         let macroChart, ratioChart, simChart;
+
+        // Función para obtener color de texto según tema
+        function getTextColor() {
+            return document.body.classList.contains('dark-mode') ? '#cbd5e1' : '#57534e';
+        }
+
+        function updateChartsTheme() {
+            const color = getTextColor();
+            if(macroChart) {
+                macroChart.options.scales.x.ticks.color = color;
+                macroChart.options.scales.y.ticks.color = color;
+                macroChart.options.plugins.legend.labels.color = color;
+                macroChart.update();
+            }
+            if(ratioChart) {
+                ratioChart.options.plugins.legend.labels.color = color;
+                ratioChart.update();
+            }
+            if(simChart) {
+                simChart.options.scales.x.ticks.color = color;
+                simChart.options.scales.y.ticks.color = color;
+                simChart.options.plugins.legend.labels.color = color;
+                simChart.update();
+            }
+        }
+
         function initCharts() {
+            Chart.defaults.color = getTextColor();
+            
             // Bar Chart
             macroChart = new Chart(document.getElementById('macrosBarChart'), {
                 type: 'bar',
                 data: {
                     labels: ingredientsData.map(i => i.name.split(' (')[0]),
                     datasets: [
-                        { label: 'HC', data: ingredientsData.map(i => i.hc), backgroundColor: '#10b981' }, // Emerald
-                        { label: 'Prot', data: ingredientsData.map(i => i.p), backgroundColor: '#3b82f6' }, // Blue
-                        { label: 'Grasa', data: ingredientsData.map(i => i.f), backgroundColor: '#f59e0b' } // Amber
+                        { label: 'HC', data: ingredientsData.map(i => i.hc), backgroundColor: '#10b981' },
+                        { label: 'Prot', data: ingredientsData.map(i => i.p), backgroundColor: '#3b82f6' },
+                        { label: 'Grasa', data: ingredientsData.map(i => i.f), backgroundColor: '#f59e0b' }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        x: { stacked: true, ticks: { color: getTextColor() } }, 
+                        y: { stacked: true, ticks: { color: getTextColor() } } 
+                    },
+                    plugins: { legend: { labels: { color: getTextColor() } } }
+                }
             });
 
-            // Ratio Chart (Distribución Calórica Aprox)
+            // Ratio Chart
             ratioChart = new Chart(document.getElementById('ratioChart'), {
                 type: 'doughnut',
                 data: {
                     labels: ['HC', 'Prot', 'Grasa'],
                     datasets: [{ 
                         data: [17, 10.5, 12.1], 
-                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'] 
+                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
+                        borderWidth: 0 // Cleaner look
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    cutout: '70%',
+                    plugins: { legend: { labels: { color: getTextColor() } } }
+                }
             });
 
             // Sim Chart
@@ -315,8 +452,8 @@
                     labels: ['0h', '1h', '2h', '3h', '4h'],
                     datasets: [{
                         label: 'Glucosa (mg/dL)',
-                        data: [100, 135, 120, 105, 100], // Curva Pan Zanahoria (Estable)
-                        borderColor: '#ea580c', // Orange 600
+                        data: [100, 135, 120, 105, 100],
+                        borderColor: '#ea580c',
                         backgroundColor: 'rgba(234, 88, 12, 0.1)',
                         fill: true,
                         tension: 0.4
@@ -325,14 +462,18 @@
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false, 
-                    scales: { y: { min: 70, max: 200 } } 
+                    scales: { 
+                        y: { min: 70, max: 200, ticks: { color: getTextColor() } },
+                        x: { ticks: { color: getTextColor() } }
+                    },
+                    plugins: { legend: { labels: { color: getTextColor() } } }
                 }
             });
 
-            // Interactive Buttons for Simulation
+            // Interactive Buttons
             document.getElementById('btn-avena-trad').addEventListener('click', () => {
-                simChart.data.datasets[0].data = [100, 180, 110, 85, 95]; // Pico rápido y bajada (posible hipo reactiva)
-                simChart.data.datasets[0].borderColor = '#ef4444'; // Red for danger/spike
+                simChart.data.datasets[0].data = [100, 180, 110, 85, 95];
+                simChart.data.datasets[0].borderColor = '#ef4444';
                 simChart.data.datasets[0].backgroundColor = 'rgba(239, 68, 68, 0.1)';
                 simChart.data.datasets[0].label = "Avena sola (Pico rápido)";
                 simChart.update();

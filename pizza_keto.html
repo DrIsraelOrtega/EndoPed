@@ -8,11 +8,30 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-         @import url('https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         
+        :root {
+            --bg-color: #f5f5f4;
+            --card-bg: #ffffff;
+            --text-main: #1c1917; 
+            --text-muted: #57534e; 
+            --border-color: #e5e7eb;
+        }
+
+        /* DARK MODE */
+        body.dark-mode {
+            --bg-color: #0f172a; 
+            --card-bg: #1e293b; 
+            --text-main: #f3f4f6; 
+            --text-muted: #cbd5e1; 
+            --border-color: #334155;
+        }
+
         body {
-            font-family: "Reddit Sans", sans-serif;
-            background-color: #f5f5f4;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .chart-container {
@@ -33,6 +52,8 @@
 
         .card-shadow {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
         }
 
         .interactive-row:hover {
@@ -40,15 +61,40 @@
             cursor: pointer;
             transition: background-color 0.2s ease;
         }
+        
+        body.dark-mode .interactive-row:hover {
+            background-color: rgba(225, 29, 72, 0.2);
+        }
 
-        /* Modal styling */
         .modal-overlay {
             background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
         }
+
+        h1, h2, h3, h4 { color: var(--text-main) !important; }
+        p, td { color: var(--text-muted); }
+        
+        /* Dark Mode Colors - Rose Theme */
+        body.dark-mode .bg-white { background-color: var(--card-bg); }
+        body.dark-mode .bg-stone-50 { background-color: #0f172a; border-color: #334155; }
+        body.dark-mode .bg-rose-50 { background-color: rgba(136, 19, 55, 0.3); border-color: #881337; }
+        body.dark-mode .text-rose-800 { color: #fda4af; }
+        body.dark-mode .text-rose-600 { color: #fb7185; }
+        
+        /* Modal */
+        body.dark-mode .bg-stone-100 { background-color: #334155; }
+        body.dark-mode .bg-stone-900 { background-color: #f8fafc; color: #0f172a; }
+
+        #theme-toggle {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        #theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
     </style>
 </head>
-<body class="text-stone-800 antialiased pb-12">
+<body class="text-stone-800 dark:text-stone-300 antialiased pb-12">
 
     <div id="contact-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay">
         <div class="bg-white rounded-2xl max-w-sm w-full p-8 text-center card-shadow border-t-8 border-rose-600">
@@ -66,10 +112,10 @@
         </div>
     </div>
 
-    <header class="bg-white border-b border-stone-200 sticky top-0 z-50">
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-50 transition-colors duration-300" id="main-header">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <a href="index.html" class="hover:bg-stone-100 p-2 rounded-lg transition">
+                <a href="index.html" class="hover:bg-stone-100 dark:hover:bg-slate-700 p-2 rounded-lg transition">
                     <i class="fas fa-arrow-left text-stone-400"></i>
                 </a>
                 <div class="bg-rose-600 text-white p-2 rounded-lg">
@@ -77,13 +123,18 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-bold text-stone-900 leading-tight">Pizza Low-Carb <span class="text-rose-600">DT1</span></h1>
-                    <p class="text-xs text-stone-500">Dr. Israel Ortega Madrigal PreMIP</p>
+                    <p class="text-xs text-stone-500 dark:text-stone-400">Israel Ortega Madrigal</p>
                 </div>
             </div>
-            <nav class="hidden md:flex gap-6 text-sm">
-                <button onclick="scrollToSection('ingredients')" class="hover:text-rose-600 transition-colors">Ingredientes</button>
-                <button onclick="scrollToSection('clinical')" class="hover:text-rose-600 transition-colors">Análisis Clínico</button>
-                <button onclick="scrollToSection('strategy')" class="hover:text-rose-600 transition-colors font-semibold text-rose-600">Estrategia Insulina</button>
+            <nav class="flex gap-4 text-sm items-center">
+                <button id="theme-toggle" onclick="toggleTheme()" class="p-2 rounded-full bg-stone-100 dark:bg-slate-700 hover:bg-stone-200 dark:hover:bg-slate-600 text-stone-600 dark:text-stone-300 transition-colors shadow-sm">
+                    <i class="fas fa-moon text-xl" id="theme-icon"></i>
+                </button>
+                <div class="hidden md:flex gap-6">
+                    <button onclick="scrollToSection('ingredients')" class="hover:text-rose-600 transition-colors">Ingredientes</button>
+                    <button onclick="scrollToSection('clinical')" class="hover:text-rose-600 transition-colors">Análisis Clínico</button>
+                    <button onclick="scrollToSection('strategy')" class="hover:text-rose-600 transition-colors font-semibold text-rose-600">Estrategia Insulina</button>
+                </div>
             </nav>
         </div>
     </header>
@@ -92,7 +143,7 @@
 
         <section class="text-center max-w-3xl mx-auto mb-12">
             <h2 class="text-3xl font-bold text-stone-800 mb-4">El Reto de las Grasas</h2>
-            <p class="text-lg text-stone-600 leading-relaxed">
+            <p class="text-lg text-stone-600 dark:text-stone-300 leading-relaxed">
                 Al sustituir la harina de trigo por almendra y queso (Keto), eliminamos el pico glucémico inmediato. Sin embargo, la alta carga de <strong>Grasas y Proteínas</strong> genera un ascenso lento y persistente a partir de la 3ra hora.
             </p>
         </section>
@@ -109,32 +160,32 @@
                     <div class="bg-rose-50 p-4 rounded-xl border border-rose-100">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-sm font-semibold text-rose-800">MACROS POR PORCIÓN</span>
-                            <span class="text-xs font-bold bg-white text-rose-600 px-2 py-1 rounded border border-rose-200">~450 Kcal</span>
+                            <span class="text-xs font-bold bg-white dark:bg-slate-700 text-rose-600 px-2 py-1 rounded border border-rose-200 dark:border-rose-900">~450 Kcal</span>
                         </div>
                         <div class="grid grid-cols-3 gap-4 text-center">
                             <div>
-                                <div class="text-2xl font-bold text-blue-600">32.0g</div>
-                                <div class="text-xs text-blue-800 uppercase font-semibold">Proteína</div>
+                                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">32.0g</div>
+                                <div class="text-xs text-blue-800 dark:text-blue-300 uppercase font-semibold">Proteína</div>
                             </div>
                             <div>
                                 <div class="text-2xl font-bold text-amber-500">38.0g</div>
-                                <div class="text-xs text-amber-700 uppercase font-semibold">Grasa</div>
+                                <div class="text-xs text-amber-700 dark:text-amber-300 uppercase font-semibold">Grasa</div>
                             </div>
                             <div>
                                 <div class="text-2xl font-bold text-emerald-500">6.0g</div>
-                                <div class="text-xs text-emerald-700 uppercase font-semibold">Carbos</div>
+                                <div class="text-xs text-emerald-700 dark:text-emerald-300 uppercase font-semibold">Carbos</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-stone-500 uppercase bg-stone-50 border-b">
+                            <thead class="text-xs text-stone-500 uppercase bg-stone-50 border-b dark:border-slate-700">
                                 <tr>
                                     <th class="px-4 py-3">Ingrediente</th>
                                     <th class="px-2 py-3 text-right">Prot.</th>
                                     <th class="px-2 py-3 text-right">Grasa</th>
-                                    <th class="px-2 py-3 text-right font-bold text-emerald-600">HC</th>
+                                    <th class="px-2 py-3 text-right font-bold text-emerald-600 dark:text-emerald-400">HC</th>
                                 </tr>
                             </thead>
                             <tbody id="ingredients-table-body"></tbody>
@@ -159,17 +210,17 @@
                     <h3 class="text-xl font-bold text-stone-800">Impacto Clínico DT1</h3>
                 </div>
                 
-                <div class="space-y-6">
+                <div class="space-y-6 text-stone-600 dark:text-stone-300">
                     <div class="border-l-4 border-emerald-500 pl-4">
-                        <h4 class="font-bold text-emerald-700 mb-1">Sin Pico Inicial</h4>
-                        <p class="text-stone-600 text-sm">
+                        <h4 class="font-bold text-emerald-700 dark:text-emerald-400 mb-1">Sin Pico Inicial</h4>
+                        <p class="text-sm">
                             Con solo 6g de hidratos, la glucemia se mantiene estable durante la primera hora post-ingesta. Muchos cometen el error de no inyectar nada.
                         </p>
                     </div>
                     <div class="border-l-4 border-red-500 pl-4">
-                        <h4 class="font-bold text-red-700 mb-1">Gluconeogénesis Tardía</h4>
-                        <p class="text-stone-600 text-sm">
-                            La gran cantidad de proteína se convierte lentamente en glucosa. Además, los ácidos grasos libres generan resistencia temporal a la insulina. El resultado es una subida que comienza a las 3 horas y puede durar hasta 6 horas.
+                        <h4 class="font-bold text-red-700 dark:text-red-400 mb-1">Gluconeogénesis Tardía</h4>
+                        <p class="text-sm">
+                            La gran cantidad de proteína se convierte lentamente en glucosa. Además, los ácidos grasos libres generan resistencia temporal a la insulina.
                         </p>
                     </div>
                 </div>
@@ -190,8 +241,8 @@
                     </h3>
                 </div>
                 <div class="flex gap-2">
-                    <button id="btn-pizza-normal" class="px-4 py-2 text-xs font-semibold rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200">Pizza Tradicional</button>
-                    <button id="btn-pizza-keto" class="px-4 py-2 text-xs font-semibold rounded-full bg-rose-100 text-rose-700 border border-rose-200">Pizza Keto</button>
+                    <button id="btn-pizza-normal" class="px-4 py-2 text-xs font-semibold rounded-full bg-stone-100 dark:bg-slate-700 text-stone-600 dark:text-stone-300 hover:bg-stone-200 transition">Pizza Tradicional</button>
+                    <button id="btn-pizza-keto" class="px-4 py-2 text-xs font-semibold rounded-full bg-rose-100 dark:bg-rose-900 text-rose-700 dark:text-rose-200 border border-rose-200 dark:border-rose-800">Pizza Keto</button>
                 </div>
             </div>
 
@@ -203,7 +254,7 @@
                 </div>
                 <div class="bg-rose-50 p-5 rounded-xl border border-rose-100 flex flex-col justify-center">
                     <h4 id="sim-title" class="text-lg font-bold text-rose-800 mb-2">Efecto Retardado</h4>
-                    <p id="sim-desc" class="text-sm text-rose-900 mb-4">
+                    <p id="sim-desc" class="text-sm text-rose-900 dark:text-rose-200 mb-4">
                         En la Pizza Keto (línea roja), observa cómo la glucosa es plana al inicio pero sube sola después. Si no cubres la grasa/proteína, amanecerás alto.
                     </p>
                 </div>
@@ -213,20 +264,20 @@
         <section id="strategy" class="bg-gradient-to-br from-rose-700 to-rose-900 rounded-2xl card-shadow p-8 text-white">
             <div class="flex flex-col md:flex-row gap-8 items-center">
                 <div class="flex-1">
-                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-calculator mr-2"></i> Estrategia UGP (Grasa-Proteína)</h2>
+                    <h2 class="text-2xl font-bold mb-4 !text-white"><i class="fas fa-calculator mr-2"></i> Estrategia UGP (Grasa-Proteína)</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
-                            <h4 class="font-bold text-amber-300 mb-1">Bolo Cuadrado / Extendido</h4>
-                            <p class="text-sm">Ideal para bomba. Programa la insulina para administrarse en 2-4 horas, no de golpe.</p>
+                            <h4 class="font-bold text-amber-300 mb-1 !text-amber-300">Bolo Cuadrado / Extendido</h4>
+                            <p class="text-sm !text-gray-200">Ideal para bomba. Programa la insulina para administrarse en 2-4 horas, no de golpe.</p>
                         </div>
                         <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
-                            <h4 class="font-bold text-emerald-300 mb-1">Bolo Diferido (Plumas)</h4>
-                            <p class="text-sm">Inyectar por los carbohidratos (casi nada) al inicio, y una segunda inyección a las 2h por la proteína.</p>
+                            <h4 class="font-bold text-emerald-300 mb-1 !text-emerald-300">Bolo Diferido (Plumas)</h4>
+                            <p class="text-sm !text-gray-200">Inyectar por los carbohidratos al inicio, y una segunda inyección a las 2h por la proteína.</p>
                         </div>
                     </div>
                 </div>
-                <div class="w-full md:w-1/3 bg-white text-stone-800 p-6 rounded-xl shadow-lg">
-                    <h4 class="font-bold border-b pb-2 mb-4 text-center">Cálculo Avanzado</h4>
+                <div class="w-full md:w-1/3 bg-white text-stone-800 p-6 rounded-xl shadow-lg dark:bg-slate-800">
+                    <h4 class="font-bold border-b pb-2 mb-4 text-center dark:text-white">Cálculo Avanzado</h4>
                     <button onclick="openModal()" class="w-full py-3 bg-rose-600 text-white rounded-xl font-bold text-sm hover:bg-rose-700 transition flex items-center justify-center gap-2">
                         <i class="fas fa-user-md"></i> Consultar Endocrinólogo
                     </button>
@@ -237,7 +288,39 @@
     </main>
 
     <script>
-        // Datos estimados para Pizza Keto (Base almendra/queso)
+        // --- LOGICA MODO OSCURO ---
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            const header = document.getElementById('main-header');
+            
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                icon.style.color = '#f59e0b';
+                header.classList.add('dark:bg-slate-900', 'dark:border-slate-800');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                icon.style.color = '#57534e';
+                header.classList.remove('dark:bg-slate-900', 'dark:border-slate-800');
+                localStorage.setItem('theme', 'light');
+            }
+            updateChartsTheme();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                toggleTheme();
+            } else {
+                updateChartsTheme();
+            }
+        });
+
         const ingredientsData = [
             { name: "Base Harina Almendra (50g)", p: 10.0, f: 25.0, c: 3.0 },
             { name: "Queso Mozzarella (60g)", p: 14.0, f: 12.0, c: 1.5 },
@@ -269,47 +352,79 @@
             const tbody = document.getElementById('ingredients-table-body');
             ingredientsData.forEach(ing => {
                 const tr = document.createElement('tr');
-                tr.className = "border-b interactive-row";
+                tr.className = "border-b interactive-row dark:border-slate-700";
                 tr.innerHTML = `
-                    <td class="px-4 py-3 font-medium text-stone-700">${ing.name}</td>
+                    <td class="px-4 py-3 font-medium text-stone-700 dark:text-stone-300">${ing.name}</td>
                     <td class="px-2 py-3 text-right">${ing.p}</td>
                     <td class="px-2 py-3 text-right">${ing.f}</td>
-                    <td class="px-2 py-3 text-right font-bold text-emerald-600">${ing.c}g</td>
+                    <td class="px-2 py-3 text-right font-bold text-emerald-600 dark:text-emerald-400">${ing.c}g</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
         let macroChart, ratioChart, simChart;
+
+        function getTextColor() {
+            return document.body.classList.contains('dark-mode') ? '#cbd5e1' : '#57534e';
+        }
+
+        function updateChartsTheme() {
+            const color = getTextColor();
+            if(macroChart) {
+                macroChart.options.scales.x.ticks.color = color;
+                macroChart.options.scales.y.ticks.color = color;
+                macroChart.options.plugins.legend.labels.color = color;
+                macroChart.update();
+            }
+            if(ratioChart) {
+                ratioChart.options.plugins.legend.labels.color = color;
+                ratioChart.update();
+            }
+            if(simChart) {
+                simChart.options.scales.x.ticks.color = color;
+                simChart.options.scales.y.ticks.color = color;
+                simChart.options.plugins.legend.labels.color = color;
+                simChart.update();
+            }
+        }
+
         function initCharts() {
-            // Bar Chart - High Fat/Prot visualization
+            Chart.defaults.color = getTextColor();
+
+            // Bar Chart
             macroChart = new Chart(document.getElementById('macrosBarChart'), {
                 type: 'bar',
                 data: {
                     labels: ingredientsData.map(i => i.name.split(' (')[0]),
                     datasets: [
-                        { label: 'HC', data: ingredientsData.map(i => i.c), backgroundColor: '#10b981' }, // Emerald
-                        { label: 'Prot', data: ingredientsData.map(i => i.p), backgroundColor: '#3b82f6' }, // Blue
-                        { label: 'Grasa', data: ingredientsData.map(i => i.f), backgroundColor: '#f59e0b' } // Amber
+                        { label: 'HC', data: ingredientsData.map(i => i.c), backgroundColor: '#10b981' },
+                        { label: 'Prot', data: ingredientsData.map(i => i.p), backgroundColor: '#3b82f6' },
+                        { label: 'Grasa', data: ingredientsData.map(i => i.f), backgroundColor: '#f59e0b' }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { x: { stacked: true }, y: { stacked: true } } 
+                }
             });
 
-            // Ratio Chart - Predominancia de Grasa
+            // Ratio Chart
             ratioChart = new Chart(document.getElementById('ratioChart'), {
                 type: 'doughnut',
                 data: {
                     labels: ['HC (Minimo)', 'Proteína', 'Grasa (Alto)'],
                     datasets: [{ 
                         data: [6.5, 28.5, 51.0], 
-                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'] 
+                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
+                        borderWidth: 0
                     }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
             });
 
-            // Sim Chart - La curva tardía
+            // Sim Chart
             const ctxSim = document.getElementById('glucoseSimChart').getContext('2d');
             simChart = new Chart(ctxSim, {
                 type: 'line',
@@ -317,8 +432,8 @@
                     labels: ['0h', '1h', '2h', '3h', '4h', '5h', '6h'],
                     datasets: [{
                         label: 'Glucosa (mg/dL)',
-                        data: [100, 110, 120, 140, 160, 170, 160], // Curva Keto (subida tardía)
-                        borderColor: '#e11d48', // Rose 600
+                        data: [100, 110, 120, 140, 160, 170, 160],
+                        borderColor: '#e11d48',
                         backgroundColor: 'rgba(225, 29, 72, 0.1)',
                         fill: true,
                         tension: 0.4
@@ -327,15 +442,13 @@
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false, 
-                    scales: { y: { min: 80, max: 250 } } 
+                    scales: { y: { min: 80, max: 250, ticks: { color: getTextColor() } }, x: { ticks: { color: getTextColor() } } } 
                 }
             });
 
-            // Interactive Buttons
             document.getElementById('btn-pizza-normal').addEventListener('click', () => {
-                // Pizza normal: Pico rápido (harina) + Pico tardío (grasa) = Desastre doble
                 simChart.data.datasets[0].data = [100, 220, 180, 200, 240, 220, 180];
-                simChart.data.datasets[0].borderColor = '#7c3aed'; // Purple
+                simChart.data.datasets[0].borderColor = '#7c3aed';
                 simChart.data.datasets[0].backgroundColor = 'rgba(124, 58, 237, 0.1)';
                 simChart.data.datasets[0].label = "Pizza Tradicional (Doble Pico)";
                 simChart.update();

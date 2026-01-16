@@ -10,9 +10,28 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         
+        :root {
+            --bg-color: #f5f5f4;
+            --card-bg: #ffffff;
+            --text-main: #1c1917; /* stone-900 */
+            --text-muted: #57534e; /* stone-600 */
+            --border-color: #e5e7eb;
+        }
+
+        /* CONFIGURACIÓN MODO OSCURO */
+        body.dark-mode {
+            --bg-color: #0f172a; /* slate-900 */
+            --card-bg: #1e293b; /* slate-800 */
+            --text-main: #f3f4f6; /* gray-100 */
+            --text-muted: #cbd5e1; /* slate-300 */
+            --border-color: #334155;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f5f5f4;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .chart-container {
@@ -33,6 +52,8 @@
 
         .card-shadow {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
         }
 
         .interactive-row:hover {
@@ -40,15 +61,46 @@
             cursor: pointer;
             transition: background-color 0.2s ease;
         }
+        
+        /* Hover Dark Mode */
+        body.dark-mode .interactive-row:hover {
+            background-color: rgba(16, 185, 129, 0.2);
+        }
 
         /* Modal styling */
         .modal-overlay {
             background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
         }
+
+        /* ADAPTACIONES DE COLOR ESPECÍFICAS */
+        h1, h2, h3, h4 { color: var(--text-main) !important; }
+        p, td, span { color: inherit; }
+        
+        /* Fondos y bordes */
+        body.dark-mode .bg-white { background-color: var(--card-bg); }
+        body.dark-mode .bg-stone-50 { background-color: #0f172a; border-color: #334155; }
+        
+        /* Tema Emerald en Dark Mode */
+        body.dark-mode .bg-emerald-50 { background-color: rgba(6, 78, 59, 0.3); border-color: #064e3b; }
+        body.dark-mode .text-emerald-800 { color: #6ee7b7; } 
+        body.dark-mode .text-emerald-600 { color: #34d399; }
+        
+        /* Modal dark override */
+        body.dark-mode .bg-stone-100 { background-color: #334155; }
+        body.dark-mode .bg-stone-900 { background-color: #f8fafc; color: #0f172a; }
+        body.dark-mode .bg-stone-900:hover { background-color: #e2e8f0; }
+
+        #theme-toggle {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        #theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
     </style>
 </head>
-<body class="text-stone-800 antialiased pb-12">
+<body class="text-stone-800 dark:text-stone-300 antialiased pb-12">
 
     <div id="contact-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay">
         <div class="bg-white rounded-2xl max-w-sm w-full p-8 text-center card-shadow border-t-8 border-emerald-500">
@@ -66,10 +118,10 @@
         </div>
     </div>
 
-    <header class="bg-white border-b border-stone-200 sticky top-0 z-50">
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-50 transition-colors duration-300" id="main-header">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <a href="index.html" class="hover:bg-stone-100 p-2 rounded-lg transition">
+                <a href="index.html" class="hover:bg-stone-100 dark:hover:bg-slate-700 p-2 rounded-lg transition">
                     <i class="fas fa-arrow-left text-stone-400"></i>
                 </a>
 
@@ -78,13 +130,19 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-bold text-stone-900 leading-tight">Bowl Inteligente <span class="text-emerald-600">DT1</span></h1>
-                    <p class="text-xs text-stone-500">Dr. Kevin Gabriel Esquivel Enríquez PreMIP</p>
+                    <p class="text-xs text-stone-500 dark:text-stone-400">Israel Ortega Madrigal</p>
                 </div>
             </div>
-            <nav class="hidden md:flex gap-6 text-sm">
-                <button onclick="scrollToSection('ingredients')" class="hover:text-emerald-600 transition-colors">Ingredientes</button>
-                <button onclick="scrollToSection('clinical')" class="hover:text-emerald-600 transition-colors">Análisis Clínico</button>
-                <button onclick="scrollToSection('strategy')" class="hover:text-emerald-600 transition-colors font-semibold text-emerald-600">Estrategia Insulina</button>
+            <nav class="flex gap-4 text-sm items-center">
+                <button id="theme-toggle" onclick="toggleTheme()" class="p-2 rounded-full bg-stone-100 dark:bg-slate-700 hover:bg-stone-200 dark:hover:bg-slate-600 text-stone-600 dark:text-stone-300 transition-colors shadow-sm" aria-label="Cambiar Tema">
+                    <i class="fas fa-moon text-xl" id="theme-icon"></i>
+                </button>
+
+                <div class="hidden md:flex gap-6">
+                    <button onclick="scrollToSection('ingredients')" class="hover:text-emerald-600 transition-colors">Ingredientes</button>
+                    <button onclick="scrollToSection('clinical')" class="hover:text-emerald-600 transition-colors">Análisis Clínico</button>
+                    <button onclick="scrollToSection('strategy')" class="hover:text-emerald-600 transition-colors font-semibold text-emerald-600">Estrategia Insulina</button>
+                </div>
             </nav>
         </div>
     </header>
@@ -93,7 +151,7 @@
 
         <section class="text-center max-w-3xl mx-auto mb-12">
             <h2 class="text-3xl font-bold text-stone-800 mb-4">Volumen Alto, Impacto Bajo</h2>
-            <p class="text-lg text-stone-600 leading-relaxed">
+            <p class="text-lg text-stone-600 dark:text-stone-300 leading-relaxed">
                 El "snack" perfecto para la diabetes tipo 1. Con solo <strong>13g de carbohidratos</strong> totales, este bowl permite saciedad mecánica (masticación y volumen gástrico) sin requerir grandes dosis de insulina.
             </p>
         </section>
@@ -110,31 +168,31 @@
                     <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-sm font-semibold text-emerald-800">TOTALES DEL BOWL</span>
-                            <span class="text-xs font-bold bg-white text-emerald-600 px-2 py-1 rounded border border-emerald-200">~145 Kcal</span>
+                            <span class="text-xs font-bold bg-white dark:bg-slate-700 text-emerald-600 px-2 py-1 rounded border border-emerald-200 dark:border-emerald-900">~145 Kcal</span>
                         </div>
                         <div class="grid grid-cols-3 gap-4 text-center">
                             <div>
-                                <div class="text-2xl font-bold text-blue-600">5.3g</div>
-                                <div class="text-xs text-blue-800 uppercase font-semibold">Proteína</div>
+                                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">5.3g</div>
+                                <div class="text-xs text-blue-800 dark:text-blue-300 uppercase font-semibold">Proteína</div>
                             </div>
                             <div>
                                 <div class="text-2xl font-bold text-amber-500">8.0g</div>
-                                <div class="text-xs text-amber-700 uppercase font-semibold">Grasa</div>
+                                <div class="text-xs text-amber-700 dark:text-amber-300 uppercase font-semibold">Grasa</div>
                             </div>
                             <div>
                                 <div class="text-2xl font-bold text-emerald-500">13.0g</div>
-                                <div class="text-xs text-emerald-700 uppercase font-semibold">Carbos</div>
+                                <div class="text-xs text-emerald-700 dark:text-emerald-300 uppercase font-semibold">Carbos</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-stone-500 uppercase bg-stone-50 border-b">
+                            <thead class="text-xs text-stone-500 uppercase bg-stone-50 border-b dark:border-slate-700">
                                 <tr>
                                     <th class="px-4 py-3">Ingrediente</th>
                                     <th class="px-2 py-3 text-right">Cant.</th>
-                                    <th class="px-2 py-3 text-right font-bold text-emerald-600">HC</th>
+                                    <th class="px-2 py-3 text-right font-bold text-emerald-600 dark:text-emerald-400">HC</th>
                                 </tr>
                             </thead>
                             <tbody id="ingredients-table-body"></tbody>
@@ -159,16 +217,16 @@
                     <h3 class="text-xl font-bold text-stone-800">Análisis Clínico DT1</h3>
                 </div>
                 
-                <div class="space-y-6">
+                <div class="space-y-6 text-stone-600 dark:text-stone-300">
                     <div class="border-l-4 border-emerald-500 pl-4">
-                        <h4 class="font-bold text-emerald-700 mb-1">Carga Glucémica Mínima</h4>
-                        <p class="text-stone-600 text-sm">
+                        <h4 class="font-bold text-emerald-700 dark:text-emerald-400 mb-1">Carga Glucémica Mínima</h4>
+                        <p class="text-sm">
                             Pepino, jícama y zanahoria aportan agua y fibra. Aunque suman carbohidratos, su absorción es muy lenta. Es ideal para corregir el hambre sin desestabilizar una glucosa que ya está en rango.
                         </p>
                     </div>
                     <div class="border-l-4 border-amber-400 pl-4">
-                        <h4 class="font-bold text-amber-700 mb-1">El Factor Cacahuate (Grasa)</h4>
-                        <p class="text-stone-600 text-sm">
+                        <h4 class="font-bold text-amber-700 dark:text-amber-400 mb-1">El Factor Cacahuate (Grasa)</h4>
+                        <p class="text-sm">
                             Los 14 cacahuates aportan ~8g de grasa saludable. Esto es clave: la grasa retrasa el vaciamiento gástrico de los vegetales, haciendo que los 13g de carbohidratos sean prácticamente invisibles para el sensor de glucosa en muchos casos.
                         </p>
                     </div>
@@ -190,8 +248,8 @@
                     </h3>
                 </div>
                 <div class="flex gap-2">
-                    <button id="btn-papas" class="px-4 py-2 text-xs font-semibold rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200">Papas Fritas (30g)</button>
-                    <button id="btn-bowl" class="px-4 py-2 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">Bowl Inteligente</button>
+                    <button id="btn-papas" class="px-4 py-2 text-xs font-semibold rounded-full bg-stone-100 dark:bg-slate-700 text-stone-600 dark:text-stone-300 hover:bg-stone-200 transition">Papas Fritas (30g)</button>
+                    <button id="btn-bowl" class="px-4 py-2 text-xs font-semibold rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800">Bowl Inteligente</button>
                 </div>
             </div>
 
@@ -203,7 +261,7 @@
                 </div>
                 <div class="bg-emerald-50 p-5 rounded-xl border border-emerald-100 flex flex-col justify-center">
                     <h4 id="sim-title" class="text-lg font-bold text-emerald-800 mb-2">Estabilidad Total</h4>
-                    <p id="sim-desc" class="text-sm text-emerald-900 mb-4">
+                    <p id="sim-desc" class="text-sm text-emerald-900 dark:text-emerald-200 mb-4">
                         Visualiza la diferencia. El Bowl Inteligente mantiene la línea basal, mientras que un snack procesado de carbos similares (pero rápidos) generaría un pico inmediato.
                     </p>
                 </div>
@@ -213,7 +271,7 @@
         <section id="strategy" class="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-2xl card-shadow p-8 text-white">
             <div class="flex flex-col md:flex-row gap-8 items-center">
                 <div class="flex-1">
-                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-syringe mr-2"></i> Estrategia de Dosificación</h2>
+                    <h2 class="text-2xl font-bold mb-4 !text-white"><i class="fas fa-syringe mr-2"></i> Estrategia de Dosificación</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
                             <h4 class="font-bold text-white mb-1">Sin Pre-Bolo Necesario</h4>
@@ -225,8 +283,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-full md:w-1/3 bg-white text-stone-800 p-6 rounded-xl shadow-lg">
-                    <h4 class="font-bold border-b pb-2 mb-4 text-center">Gestión Médica</h4>
+                <div class="w-full md:w-1/3 bg-white text-stone-800 p-6 rounded-xl shadow-lg dark:bg-slate-800">
+                    <h4 class="font-bold border-b pb-2 mb-4 text-center dark:text-white">Gestión Médica</h4>
                     <button onclick="openModal()" class="w-full py-3 bg-emerald-600 text-white rounded-xl font-bold text-sm hover:bg-emerald-700 transition flex items-center justify-center gap-2">
                         <i class="fas fa-user-md"></i> Consultar Experto
                     </button>
@@ -237,7 +295,40 @@
     </main>
 
     <script>
-        // Datos basados en la imagen proporcionada + estimaciones estándar para cacahuates
+        // --- LÓGICA DE MODO OSCURO ---
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            const header = document.getElementById('main-header');
+            
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                icon.style.color = '#f59e0b';
+                header.classList.add('dark:bg-slate-900', 'dark:border-slate-800');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                icon.style.color = '#57534e';
+                header.classList.remove('dark:bg-slate-900', 'dark:border-slate-800');
+                localStorage.setItem('theme', 'light');
+            }
+            updateChartsTheme();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                toggleTheme();
+            } else {
+                updateChartsTheme();
+            }
+        });
+
+        // --- DATOS Y GRÁFICAS ---
         const ingredientsData = [
             { name: "Pepino", cant: "1/2 taza", hc: 2.0, p: 0.3, f: 0.1 },
             { name: "Jícama", cant: "1/2 taza", hc: 4.0, p: 0.5, f: 0.1 },
@@ -269,19 +360,46 @@
             const tbody = document.getElementById('ingredients-table-body');
             ingredientsData.forEach(ing => {
                 const tr = document.createElement('tr');
-                tr.className = "border-b interactive-row";
+                tr.className = "border-b interactive-row dark:border-slate-700";
                 tr.innerHTML = `
-                    <td class="px-4 py-3 font-medium text-stone-700">${ing.name}</td>
-                    <td class="px-2 py-3 text-right text-xs text-stone-500">${ing.cant}</td>
-                    <td class="px-2 py-3 text-right font-bold text-emerald-600">${ing.hc}g</td>
+                    <td class="px-4 py-3 font-medium text-stone-700 dark:text-stone-300">${ing.name}</td>
+                    <td class="px-2 py-3 text-right text-xs text-stone-500 dark:text-stone-400">${ing.cant}</td>
+                    <td class="px-2 py-3 text-right font-bold text-emerald-600 dark:text-emerald-400">${ing.hc}g</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
         let macroChart, ratioChart, simChart;
+
+        function getTextColor() {
+            return document.body.classList.contains('dark-mode') ? '#cbd5e1' : '#57534e';
+        }
+
+        function updateChartsTheme() {
+            const color = getTextColor();
+            if(macroChart) {
+                macroChart.options.scales.x.ticks.color = color;
+                macroChart.options.scales.y.ticks.color = color;
+                macroChart.options.plugins.legend.labels.color = color;
+                macroChart.update();
+            }
+            if(ratioChart) {
+                ratioChart.options.plugins.legend.labels.color = color;
+                ratioChart.update();
+            }
+            if(simChart) {
+                simChart.options.scales.x.ticks.color = color;
+                simChart.options.scales.y.ticks.color = color;
+                simChart.options.plugins.legend.labels.color = color;
+                simChart.update();
+            }
+        }
+
         function initCharts() {
-            // Bar Chart - Macronutrientes por ingrediente
+            Chart.defaults.color = getTextColor();
+
+            // Bar Chart
             macroChart = new Chart(document.getElementById('macrosBarChart'), {
                 type: 'bar',
                 data: {
@@ -292,23 +410,28 @@
                         { label: 'Grasa', data: ingredientsData.map(i => i.f), backgroundColor: '#f59e0b' }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { x: { stacked: true }, y: { stacked: true } } 
+                }
             });
 
-            // Ratio Chart (Distribución global del bowl)
+            // Ratio Chart
             ratioChart = new Chart(document.getElementById('ratioChart'), {
                 type: 'doughnut',
                 data: {
                     labels: ['Carbohidratos', 'Proteína', 'Grasa'],
                     datasets: [{ 
                         data: [13.0, 5.3, 7.8], 
-                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'] 
+                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
+                        borderWidth: 0
                     }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
             });
 
-            // Sim Chart - Simulación Glucémica
+            // Sim Chart
             const ctxSim = document.getElementById('glucoseSimChart').getContext('2d');
             simChart = new Chart(ctxSim, {
                 type: 'line',
@@ -316,8 +439,8 @@
                     labels: ['0m', '30m', '1h', '1h30', '2h', '3h'],
                     datasets: [{
                         label: 'Glucosa (mg/dL)',
-                        data: [100, 105, 110, 105, 100, 100], // Perfil plano
-                        borderColor: '#10b981', // Emerald
+                        data: [100, 105, 110, 105, 100, 100], 
+                        borderColor: '#10b981', 
                         backgroundColor: 'rgba(16, 185, 129, 0.1)',
                         fill: true,
                         tension: 0.4
@@ -330,26 +453,26 @@
                 }
             });
 
-            // Botones interactivos
+            // Interactive Buttons
             document.getElementById('btn-papas').addEventListener('click', () => {
-                simChart.data.datasets[0].data = [100, 160, 140, 120, 100, 90]; // Pico rápido
-                simChart.data.datasets[0].borderColor = '#ef4444'; // Rojo alerta
+                simChart.data.datasets[0].data = [100, 160, 140, 120, 100, 90]; 
+                simChart.data.datasets[0].borderColor = '#ef4444'; 
                 simChart.data.datasets[0].backgroundColor = 'rgba(239, 68, 68, 0.1)';
                 simChart.data.datasets[0].label = "Papas Fritas (Pico Rápido)";
                 simChart.update();
                 document.getElementById('sim-title').innerText = "Alerta de Pico";
-                document.getElementById('sim-title').classList.replace('text-emerald-800', 'text-red-800');
+                document.getElementById('sim-title').className = "text-lg font-bold text-red-800 mb-2";
                 document.getElementById('sim-desc').innerText = "Alimentos procesados con almidón simple y grasa saturada disparan la glucosa rápidamente.";
             });
 
             document.getElementById('btn-bowl').addEventListener('click', () => {
-                simChart.data.datasets[0].data = [100, 105, 110, 105, 100, 100]; // Plano
+                simChart.data.datasets[0].data = [100, 105, 110, 105, 100, 100]; 
                 simChart.data.datasets[0].borderColor = '#10b981';
                 simChart.data.datasets[0].backgroundColor = 'rgba(16, 185, 129, 0.1)';
                 simChart.data.datasets[0].label = "Bowl Inteligente (Estable)";
                 simChart.update();
                 document.getElementById('sim-title').innerText = "Estabilidad Total";
-                document.getElementById('sim-title').classList.replace('text-red-800', 'text-emerald-800');
+                document.getElementById('sim-title').className = "text-lg font-bold text-emerald-800 mb-2";
                 document.getElementById('sim-desc').innerText = "El Bowl Inteligente mantiene la línea basal gracias a la fibra y la grasa del cacahuate.";
             });
         }

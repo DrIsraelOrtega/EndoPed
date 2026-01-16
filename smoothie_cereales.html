@@ -8,11 +8,30 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-         @import url('https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         
+        :root {
+            --bg-color: #f5f5f4;
+            --card-bg: #ffffff;
+            --text-main: #1c1917; 
+            --text-muted: #57534e; 
+            --border-color: #e5e7eb;
+        }
+
+        /* DARK MODE */
+        body.dark-mode {
+            --bg-color: #0f172a; 
+            --card-bg: #1e293b; 
+            --text-main: #f3f4f6; 
+            --text-muted: #cbd5e1; 
+            --border-color: #334155;
+        }
+
         body {
-            font-family: "Reddit Sans", sans-serif;
-            background-color: #f5f5f4;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .chart-container {
@@ -33,6 +52,8 @@
 
         .card-shadow {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
         }
 
         .interactive-row:hover {
@@ -40,15 +61,40 @@
             cursor: pointer;
             transition: background-color 0.2s ease;
         }
+        
+        body.dark-mode .interactive-row:hover {
+            background-color: rgba(147, 51, 234, 0.2);
+        }
 
-        /* Modal styling */
         .modal-overlay {
             background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
         }
+
+        h1, h2, h3, h4 { color: var(--text-main) !important; }
+        p, td { color: var(--text-muted); }
+        
+        /* Dark Mode Colors - Purple Theme */
+        body.dark-mode .bg-white { background-color: var(--card-bg); }
+        body.dark-mode .bg-stone-50 { background-color: #0f172a; border-color: #334155; }
+        body.dark-mode .bg-purple-50 { background-color: rgba(88, 28, 135, 0.3); border-color: #581c87; }
+        body.dark-mode .text-purple-800 { color: #d8b4fe; }
+        body.dark-mode .text-purple-600 { color: #c084fc; }
+        
+        /* Modal */
+        body.dark-mode .bg-stone-100 { background-color: #334155; }
+        body.dark-mode .bg-stone-900 { background-color: #f8fafc; color: #0f172a; }
+
+        #theme-toggle {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        #theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
     </style>
 </head>
-<body class="text-stone-800 antialiased pb-12">
+<body class="text-stone-800 dark:text-stone-300 antialiased pb-12">
 
     <div id="contact-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay">
         <div class="bg-white rounded-2xl max-w-sm w-full p-8 text-center card-shadow border-t-8 border-purple-600">
@@ -66,10 +112,10 @@
         </div>
     </div>
 
-    <header class="bg-white border-b border-stone-200 sticky top-0 z-50">
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-50 transition-colors duration-300" id="main-header">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <a href="index.html" class="hover:bg-stone-100 p-2 rounded-lg transition">
+                <a href="index.html" class="hover:bg-stone-100 dark:hover:bg-slate-700 p-2 rounded-lg transition">
                     <i class="fas fa-arrow-left text-stone-400"></i>
                 </a>
                 <div class="bg-purple-600 text-white p-2 rounded-lg">
@@ -77,13 +123,18 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-bold text-stone-900 leading-tight">Smoothie Cereales <span class="text-purple-600">Low-GI</span></h1>
-                    <p class="text-xs text-stone-500">Dr. Israel Ortega Madrigal PreMIP</p>
+                    <p class="text-xs text-stone-500 dark:text-stone-400">Israel Ortega Madrigal</p>
                 </div>
             </div>
-            <nav class="hidden md:flex gap-6 text-sm">
-                <button onclick="scrollToSection('ingredients')" class="hover:text-purple-600 transition-colors">Ingredientes</button>
-                <button onclick="scrollToSection('clinical')" class="hover:text-purple-600 transition-colors">Análisis Clínico</button>
-                <button onclick="scrollToSection('strategy')" class="hover:text-purple-600 transition-colors font-semibold text-purple-600">Estrategia Insulina</button>
+            <nav class="flex gap-4 text-sm items-center">
+                <button id="theme-toggle" onclick="toggleTheme()" class="p-2 rounded-full bg-stone-100 dark:bg-slate-700 hover:bg-stone-200 dark:hover:bg-slate-600 text-stone-600 dark:text-stone-300 transition-colors shadow-sm">
+                    <i class="fas fa-moon text-xl" id="theme-icon"></i>
+                </button>
+                <div class="hidden md:flex gap-6">
+                    <button onclick="scrollToSection('ingredients')" class="hover:text-purple-600 transition-colors">Ingredientes</button>
+                    <button onclick="scrollToSection('clinical')" class="hover:text-purple-600 transition-colors">Análisis Clínico</button>
+                    <button onclick="scrollToSection('strategy')" class="hover:text-purple-600 transition-colors font-semibold text-purple-600">Estrategia Insulina</button>
+                </div>
             </nav>
         </div>
     </header>
@@ -92,8 +143,8 @@
 
         <section class="text-center max-w-3xl mx-auto mb-12">
             <h2 class="text-3xl font-bold text-stone-800 mb-4">Postre Líquido Inteligente</h2>
-            <p class="text-lg text-stone-600 leading-relaxed">
-                A diferencia de los licuados tradicionales que disparan la glucosa, esta mezcla utiliza <strong>Avena Cruda y Chía</strong>. La fibra intacta y las grasas saludables crean una absorción lenta, ideal para evitar la "hiperglucemia de rebote" antes de dormir.
+            <p class="text-lg text-stone-600 dark:text-stone-300 leading-relaxed">
+                A diferencia de los licuados tradicionales que disparan la glucosa, esta mezcla utiliza <strong>Avena Cruda y Chía</strong>. La fibra intacta y las grasas saludables crean una absorción lenta.
             </p>
         </section>
 
@@ -109,32 +160,32 @@
                     <div class="bg-purple-50 p-4 rounded-xl border border-purple-100">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-sm font-semibold text-purple-800">TOTALES POR VASO (350ml)</span>
-                            <span class="text-xs font-bold bg-white text-purple-600 px-2 py-1 rounded border border-purple-200">~280 Kcal</span>
+                            <span class="text-xs font-bold bg-white dark:bg-slate-700 text-purple-600 px-2 py-1 rounded border border-purple-200 dark:border-purple-900">~280 Kcal</span>
                         </div>
                         <div class="grid grid-cols-3 gap-4 text-center">
                             <div>
-                                <div class="text-2xl font-bold text-blue-600">18.0g</div>
-                                <div class="text-xs text-blue-800 uppercase font-semibold">Proteína</div>
+                                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">18.0g</div>
+                                <div class="text-xs text-blue-800 dark:text-blue-300 uppercase font-semibold">Proteína</div>
                             </div>
                             <div>
                                 <div class="text-2xl font-bold text-amber-500">10.5g</div>
-                                <div class="text-xs text-amber-700 uppercase font-semibold">Grasa</div>
+                                <div class="text-xs text-amber-700 dark:text-amber-300 uppercase font-semibold">Grasa</div>
                             </div>
                             <div>
                                 <div class="text-2xl font-bold text-emerald-500">28.0g</div>
-                                <div class="text-xs text-emerald-700 uppercase font-semibold">Carbos</div>
+                                <div class="text-xs text-emerald-700 dark:text-emerald-300 uppercase font-semibold">Carbos</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-stone-500 uppercase bg-stone-50 border-b">
+                            <thead class="text-xs text-stone-500 uppercase bg-stone-50 border-b dark:border-slate-700">
                                 <tr>
                                     <th class="px-4 py-3">Ingrediente</th>
                                     <th class="px-2 py-3 text-right">Prot.</th>
                                     <th class="px-2 py-3 text-right">Fibra</th>
-                                    <th class="px-2 py-3 text-right font-bold text-emerald-600">HC</th>
+                                    <th class="px-2 py-3 text-right font-bold text-emerald-600 dark:text-emerald-400">HC</th>
                                 </tr>
                             </thead>
                             <tbody id="ingredients-table-body"></tbody>
@@ -159,17 +210,17 @@
                     <h3 class="text-xl font-bold text-stone-800">Análisis Clínico DT1</h3>
                 </div>
                 
-                <div class="space-y-6">
+                <div class="space-y-6 text-stone-600 dark:text-stone-300">
                     <div class="border-l-4 border-emerald-500 pl-4">
-                        <h4 class="font-bold text-emerald-700 mb-1">Matriz de Fibra Viscosa (Beta-Glucano)</h4>
-                        <p class="text-stone-600 text-sm">
-                            La avena cruda contiene beta-glucanos que, al mezclarse con el líquido y la chía, forman un gel en el estómago. Este gel "atrapa" los carbohidratos, impidiendo que pasen rápido a la sangre. Es un freno fisiológico natural.
+                        <h4 class="font-bold text-emerald-700 dark:text-emerald-400 mb-1">Matriz de Fibra Viscosa</h4>
+                        <p class="text-sm">
+                            La avena cruda contiene beta-glucanos que, al mezclarse con el líquido y la chía, forman un gel en el estómago que "atrapa" los carbohidratos.
                         </p>
                     </div>
                     <div class="border-l-4 border-purple-500 pl-4">
-                        <h4 class="font-bold text-purple-700 mb-1">Índice Glucémico < 55</h4>
-                        <p class="text-stone-600 text-sm">
-                            Aunque tiene 28g de carbohidratos, provienen de fuentes complejas (avena/frutos rojos). El pico glucémico es una "colina suave" en lugar de una montaña rusa, facilitando que la insulina rápida actúe a tiempo.
+                        <h4 class="font-bold text-purple-700 dark:text-purple-400 mb-1">Índice Glucémico < 55</h4>
+                        <p class="text-sm">
+                            Aunque tiene 28g de carbohidratos, provienen de fuentes complejas. El pico glucémico es una "colina suave", facilitando que la insulina rápida actúe a tiempo.
                         </p>
                     </div>
                 </div>
@@ -190,8 +241,8 @@
                     </h3>
                 </div>
                 <div class="flex gap-2">
-                    <button id="btn-malteada" class="px-4 py-2 text-xs font-semibold rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200">Malteada Chocolate</button>
-                    <button id="btn-smoothie" class="px-4 py-2 text-xs font-semibold rounded-full bg-purple-100 text-purple-700 border border-purple-200">Smoothie Low-GI</button>
+                    <button id="btn-malteada" class="px-4 py-2 text-xs font-semibold rounded-full bg-stone-100 dark:bg-slate-700 text-stone-600 dark:text-stone-300 hover:bg-stone-200 transition">Malteada</button>
+                    <button id="btn-smoothie" class="px-4 py-2 text-xs font-semibold rounded-full bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 border border-purple-200 dark:border-purple-800">Smoothie Low-GI</button>
                 </div>
             </div>
 
@@ -203,8 +254,8 @@
                 </div>
                 <div class="bg-purple-50 p-5 rounded-xl border border-purple-100 flex flex-col justify-center">
                     <h4 id="sim-title" class="text-lg font-bold text-purple-800 mb-2">Curva Sostenible</h4>
-                    <p id="sim-desc" class="text-sm text-purple-900 mb-4">
-                        El Smoothie Low-GI (Línea Morada) eleva la glucosa suavemente y la mantiene estable, ideal para evitar hipoglucemias nocturnas sin causar hiperglucemia al amanecer.
+                    <p id="sim-desc" class="text-sm text-purple-900 dark:text-purple-200 mb-4">
+                        El Smoothie Low-GI eleva la glucosa suavemente y la mantiene estable, ideal para evitar hipoglucemias nocturnas.
                     </p>
                 </div>
             </div>
@@ -213,20 +264,20 @@
         <section id="strategy" class="bg-gradient-to-br from-purple-700 to-purple-900 rounded-2xl card-shadow p-8 text-white">
             <div class="flex flex-col md:flex-row gap-8 items-center">
                 <div class="flex-1">
-                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-calculator mr-2"></i> Estrategia de Dosificación</h2>
+                    <h2 class="text-2xl font-bold mb-4 !text-white"><i class="fas fa-calculator mr-2"></i> Estrategia de Dosificación</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
-                            <h4 class="font-bold text-emerald-300 mb-1">Pre-Bolo Estándar</h4>
-                            <p class="text-sm">15-20 minutos antes es ideal. La fibra retrasa la absorción, coincidiendo perfectamente con el pico de acción de insulinas como Lispro/Aspart.</p>
+                            <h4 class="font-bold text-emerald-300 mb-1 !text-emerald-300">Pre-Bolo Estándar</h4>
+                            <p class="text-sm !text-gray-200">15-20 minutos antes es ideal. La fibra retrasa la absorción.</p>
                         </div>
                         <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
-                            <h4 class="font-bold text-amber-300 mb-1">Cobertura Proteica</h4>
-                            <p class="text-sm">El Yogurt Griego aporta proteína. En cuerpos sensibles, considera un pequeño refuerzo (+10%) o ratio más agresivo.</p>
+                            <h4 class="font-bold text-amber-300 mb-1 !text-amber-300">Cobertura Proteica</h4>
+                            <p class="text-sm !text-gray-200">El Yogurt Griego aporta proteína. En cuerpos sensibles, considera un pequeño refuerzo (+10%).</p>
                         </div>
                     </div>
                 </div>
-                <div class="w-full md:w-1/3 bg-white text-stone-800 p-6 rounded-xl shadow-lg">
-                    <h4 class="font-bold border-b pb-2 mb-4 text-center">Consultar Experto</h4>
+                <div class="w-full md:w-1/3 bg-white text-stone-800 p-6 rounded-xl shadow-lg dark:bg-slate-800">
+                    <h4 class="font-bold border-b pb-2 mb-4 text-center dark:text-white">Consultar Experto</h4>
                     <button onclick="openModal()" class="w-full py-3 bg-purple-600 text-white rounded-xl font-bold text-sm hover:bg-purple-700 transition flex items-center justify-center gap-2">
                         <i class="fas fa-user-md"></i> Contactar Dra. Granados
                     </button>
@@ -237,13 +288,45 @@
     </main>
 
     <script>
-        // Datos estimados: Smoothie Avena, Chia, Yogurt Griego, Frutos Rojos
+        // --- LOGICA MODO OSCURO ---
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            const header = document.getElementById('main-header');
+            
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                icon.style.color = '#f59e0b';
+                header.classList.add('dark:bg-slate-900', 'dark:border-slate-800');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                icon.style.color = '#57534e';
+                header.classList.remove('dark:bg-slate-900', 'dark:border-slate-800');
+                localStorage.setItem('theme', 'light');
+            }
+            updateChartsTheme();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                toggleTheme();
+            } else {
+                updateChartsTheme();
+            }
+        });
+
         const ingredientsData = [
             { name: "Avena Cruda (30g)", p: 4.0, f_fib: 3.0, c: 17.0, fat: 2.0 },
             { name: "Yogurt Griego (150g)", p: 12.0, f_fib: 0.0, c: 5.0, fat: 0.5 },
-            { name: "Semillas Chia (10g)", p: 1.5, f_fib: 3.5, c: 1.0, fat: 3.0 }, // c is net carbs approx
+            { name: "Semillas Chia (10g)", p: 1.5, f_fib: 3.5, c: 1.0, fat: 3.0 },
             { name: "Frutos Rojos (50g)", p: 0.5, f_fib: 2.0, c: 5.0, fat: 0.0 },
-            { name: "Leche Almendra (200ml)", p: 1.0, f_fib: 1.0, c: 1.0, fat: 2.5 } // Unsweetened
+            { name: "Leche Almendra (200ml)", p: 1.0, f_fib: 1.0, c: 1.0, fat: 2.5 }
         ];
 
         function scrollToSection(id) {
@@ -269,41 +352,73 @@
             const tbody = document.getElementById('ingredients-table-body');
             ingredientsData.forEach(ing => {
                 const tr = document.createElement('tr');
-                tr.className = "border-b interactive-row";
+                tr.className = "border-b interactive-row dark:border-slate-700";
                 tr.innerHTML = `
-                    <td class="px-4 py-3 font-medium text-stone-700">${ing.name}</td>
-                    <td class="px-2 py-3 text-right text-blue-600">${ing.p}g</td>
-                    <td class="px-2 py-3 text-right text-stone-500">${ing.f_fib}g</td>
-                    <td class="px-2 py-3 text-right font-bold text-emerald-600">${ing.c}g</td>
+                    <td class="px-4 py-3 font-medium text-stone-700 dark:text-stone-300">${ing.name}</td>
+                    <td class="px-2 py-3 text-right text-blue-600 dark:text-blue-400">${ing.p}g</td>
+                    <td class="px-2 py-3 text-right text-stone-500 dark:text-stone-400">${ing.f_fib}g</td>
+                    <td class="px-2 py-3 text-right font-bold text-emerald-600 dark:text-emerald-400">${ing.c}g</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
         let macroChart, ratioChart, simChart;
+
+        function getTextColor() {
+            return document.body.classList.contains('dark-mode') ? '#cbd5e1' : '#57534e';
+        }
+
+        function updateChartsTheme() {
+            const color = getTextColor();
+            if(macroChart) {
+                macroChart.options.scales.x.ticks.color = color;
+                macroChart.options.scales.y.ticks.color = color;
+                macroChart.options.plugins.legend.labels.color = color;
+                macroChart.update();
+            }
+            if(ratioChart) {
+                ratioChart.options.plugins.legend.labels.color = color;
+                ratioChart.update();
+            }
+            if(simChart) {
+                simChart.options.scales.x.ticks.color = color;
+                simChart.options.scales.y.ticks.color = color;
+                simChart.options.plugins.legend.labels.color = color;
+                simChart.update();
+            }
+        }
+
         function initCharts() {
-            // Bar Chart - Macronutrientes
+            Chart.defaults.color = getTextColor();
+
+            // Bar Chart
             macroChart = new Chart(document.getElementById('macrosBarChart'), {
                 type: 'bar',
                 data: {
                     labels: ingredientsData.map(i => i.name.split(' (')[0]),
                     datasets: [
-                        { label: 'HC', data: ingredientsData.map(i => i.c), backgroundColor: '#10b981' }, // Emerald
-                        { label: 'Prot', data: ingredientsData.map(i => i.p), backgroundColor: '#3b82f6' }, // Blue
-                        { label: 'Grasa', data: ingredientsData.map(i => i.fat), backgroundColor: '#f59e0b' } // Amber
+                        { label: 'HC', data: ingredientsData.map(i => i.c), backgroundColor: '#10b981' },
+                        { label: 'Prot', data: ingredientsData.map(i => i.p), backgroundColor: '#3b82f6' },
+                        { label: 'Grasa', data: ingredientsData.map(i => i.fat), backgroundColor: '#f59e0b' }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { x: { stacked: true }, y: { stacked: true } } 
+                }
             });
 
-            // Ratio Chart - Equilibrio
+            // Ratio Chart
             ratioChart = new Chart(document.getElementById('ratioChart'), {
                 type: 'doughnut',
                 data: {
                     labels: ['Carbohidratos', 'Proteína', 'Grasa'],
                     datasets: [{ 
-                        data: [29, 19, 8], // Sums approx
-                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'] 
+                        data: [29, 19, 8], 
+                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'],
+                        borderWidth: 0
                     }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
@@ -317,8 +432,8 @@
                     labels: ['0m', '30m', '1h', '1h30', '2h', '3h'],
                     datasets: [{
                         label: 'Glucosa (mg/dL)',
-                        data: [100, 120, 140, 130, 110, 100], // Curva Suave
-                        borderColor: '#9333ea', // Purple 600
+                        data: [100, 120, 140, 130, 110, 100],
+                        borderColor: '#9333ea',
                         backgroundColor: 'rgba(147, 51, 234, 0.1)',
                         fill: true,
                         tension: 0.4
@@ -327,20 +442,18 @@
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false, 
-                    scales: { y: { min: 70, max: 250 } } 
+                    scales: { y: { min: 70, max: 250, ticks: { color: getTextColor() } }, x: { ticks: { color: getTextColor() } } } 
                 }
             });
 
-            // Interactive Buttons
             document.getElementById('btn-malteada').addEventListener('click', () => {
-                // Malteada: Azucar simple, leche entera = Pico vertical
-                simChart.data.datasets[0].data = [100, 210, 240, 180, 90, 80]; // Pico y bajón (hipo reactiva)
-                simChart.data.datasets[0].borderColor = '#dc2626'; // Red
+                simChart.data.datasets[0].data = [100, 210, 240, 180, 90, 80];
+                simChart.data.datasets[0].borderColor = '#dc2626';
                 simChart.data.datasets[0].backgroundColor = 'rgba(220, 38, 38, 0.1)';
                 simChart.data.datasets[0].label = "Malteada Comercial (Pico + Hipo)";
                 simChart.update();
                 document.getElementById('sim-title').innerText = "Peligro de Rebote";
-                document.getElementById('sim-title').classList.replace('text-purple-800', 'text-red-800');
+                document.getElementById('sim-title').className = "text-lg font-bold text-red-800 mb-2";
                 document.getElementById('sim-desc').innerText = "El azúcar líquido sube violentamente. La insulina entra de golpe y causa una hipoglucemia reactiva a las 2 horas.";
             });
 
@@ -351,7 +464,7 @@
                 simChart.data.datasets[0].label = "Smoothie Low-GI (Estable)";
                 simChart.update();
                 document.getElementById('sim-title').innerText = "Curva Sostenible";
-                document.getElementById('sim-title').classList.replace('text-red-800', 'text-purple-800');
+                document.getElementById('sim-title').className = "text-lg font-bold text-purple-800 mb-2";
                 document.getElementById('sim-desc').innerText = "La fibra de la avena y la chía 'frenan' la entrada de glucosa, permitiendo una digestión tranquila.";
             });
         }
