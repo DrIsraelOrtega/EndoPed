@@ -29,6 +29,19 @@
             background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
         }
+
+        /* Gradient para la barra de glucosa */
+        .glucose-gradient {
+            background: linear-gradient(90deg, 
+                #ef4444 0%,    /* Rojo Hipo */
+                #ef4444 15%, 
+                #10b981 15%,   /* Verde Meta */
+                #10b981 60%, 
+                #f59e0b 60%,   /* Amarillo Alta */
+                #f59e0b 80%, 
+                #7f1d1d 80%    /* Rojo Oscuro Cetoacidosis */
+            );
+        }
     </style>
 </head>
 <body class="text-stone-800 antialiased pb-12">
@@ -70,12 +83,101 @@
 
     <main class="max-w-6xl mx-auto px-4 mt-12 space-y-10">
 
-        <section class="text-center max-w-3xl mx-auto mb-16">
+        <section class="text-center max-w-3xl mx-auto mb-10">
             <span class="px-3 py-1 bg-stone-200 text-stone-700 rounded-full text-xs font-bold uppercase tracking-wide mb-4 inline-block">Menú Inteligente</span>
-            <h2 class="text-4xl font-bold text-stone-800 mb-6">Selecciona tu Platillo</h2>
-            <p class="text-lg text-stone-600 leading-relaxed">
-                Herramientas de conteo de carbohidratos y simulación de impacto glucémico para optimizar la dosificación de insulina.
+            <h2 class="text-4xl font-bold text-stone-800 mb-4">Selecciona tu Platillo</h2>
+            <p class="text-lg text-stone-600 leading-relaxed mb-6">
+                Herramientas de conteo de carbohidratos y simulación de impacto glucémico.
             </p>
+
+            <button onclick="toggleEmergency()" class="group inline-flex items-center gap-2 px-6 py-3 bg-red-50 text-red-700 font-bold rounded-full border border-red-200 hover:bg-red-100 transition-all shadow-sm">
+                <i class="fas fa-exclamation-triangle text-red-500 animate-pulse"></i>
+                🆘 Semáforo de Alerta: ¿Cuándo actuar?
+                <i id="chevron-icon" class="fas fa-chevron-down text-sm transition-transform duration-300"></i>
+            </button>
+        </section>
+
+        <section id="emergency-guide" class="hidden max-w-4xl mx-auto mb-16 bg-white rounded-2xl border-l-8 border-red-500 card-shadow overflow-hidden transition-all duration-500">
+            <div class="p-8">
+                <h3 class="text-2xl font-bold text-stone-800 mb-2">Protocolo de Acción Rápida</h3>
+                <p class="text-stone-500 text-sm mb-8">Identifica tu nivel de glucosa actual y sigue las instrucciones. Ante la duda, contacta a urgencias.</p>
+
+                <div class="relative h-12 w-full rounded-full glucose-gradient mb-4 shadow-inner">
+                    <div class="absolute top-0 bottom-0 border-r-2 border-white/50" style="left: 15%"></div>
+                    <div class="absolute top-0 bottom-0 border-r-2 border-white/50" style="left: 60%"></div>
+                    <div class="absolute top-0 bottom-0 border-r-2 border-white/50" style="left: 80%"></div>
+                    
+                    <div class="absolute w-full -top-6 flex text-xs font-bold text-stone-400">
+                        <span style="width: 15%" class="text-center text-red-600">Bajo</span>
+                        <span style="width: 45%" class="text-center text-emerald-600">Meta</span>
+                        <span style="width: 20%" class="text-center text-amber-600">Alto</span>
+                        <span style="width: 20%" class="text-center text-red-800">Peligro</span>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between text-xs font-mono text-stone-400 mb-8 px-1">
+                    <span>0</span>
+                    <span>70</span>
+                    <span>180</span>
+                    <span>250</span>
+                    <span>400+</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-arrow-down text-red-600 text-xl"></i>
+                            <h4 class="font-bold text-red-800 text-sm">Menos de 70 mg/dL</h4>
+                        </div>
+                        <p class="text-xs text-red-700 font-semibold mb-2">HIPOGLUCEMIA</p>
+                        <ul class="text-xs text-stone-600 space-y-1">
+                            <li>• Comer 15g carbohidratos rápidos (Jugo, Azúcar).</li>
+                            <li>• Esperar 15 min y medir.</li>
+                            <li>• Si sigue bajo, repetir.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-check-circle text-emerald-600 text-xl"></i>
+                            <h4 class="font-bold text-emerald-800 text-sm">70 - 180 mg/dL</h4>
+                        </div>
+                        <p class="text-xs text-emerald-700 font-semibold mb-2">RANGO META</p>
+                        <ul class="text-xs text-stone-600 space-y-1">
+                            <li>• Mantener monitoreo habitual.</li>
+                            <li>• Proceder con la comida planificada.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-amber-50 p-4 rounded-xl border border-amber-100">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-arrow-up text-amber-600 text-xl"></i>
+                            <h4 class="font-bold text-amber-800 text-sm">180 - 250 mg/dL</h4>
+                        </div>
+                        <p class="text-xs text-amber-700 font-semibold mb-2">ELEVADO</p>
+                        <ul class="text-xs text-stone-600 space-y-1">
+                            <li>• Aplicar corrección de insulina según ratio.</li>
+                            <li>• Beber agua simple.</li>
+                            <li>• Retrasar comida 15 min.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-stone-800 p-4 rounded-xl border border-stone-900 text-white">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-ambulance text-red-500 text-xl animate-pulse"></i>
+                            <h4 class="font-bold text-red-400 text-sm">Más de 250 + Cetonas</h4>
+                        </div>
+                        <p class="text-xs text-red-300 font-semibold mb-2">PELIGRO CETOACIDOSIS</p>
+                        <ul class="text-xs text-gray-300 space-y-1">
+                            <li>• Checar cetonas en orina/sangre.</li>
+                            <li>• No hacer ejercicio.</li>
+                            <li>• <strong>IR A URGENCIAS</strong> si hay vómito o deshidratación.</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
         </section>
 
         <section class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -214,9 +316,28 @@
 
         </section>
 
-        <footer class="mt-16 text-center text-stone-400 text-sm">
-            <p class="mb-2">Proyecto de Análisis Nutricional para Diabetes Tipo 1</p>
-            <p>&copy; 2026 Israel Ortega Madrigal | Hospital Civil de Guadalajara</p>
+        <footer class="mt-16 text-center text-stone-500 text-sm pb-8 border-t border-stone-200 pt-8">
+            <p class="mb-2 font-medium">Proyecto de Análisis Nutricional para Diabetes Tipo 1</p>
+            <p class="mb-6">&copy; 2026 Dr. Israel Ortega Madrigal | Hospital Civil de Guadalajara</p>
+
+            <div class="mb-8 flex flex-col items-center gap-1 text-stone-400">
+                <p class="font-bold text-stone-600 flex items-center gap-2">
+                    <i class="fas fa-hospital-alt"></i> Hospital Civil de Guadalajara Fray Antonio Alcalde
+                </p>
+                <p class="flex items-center gap-1">
+                    <i class="fas fa-map-marker-alt text-stone-400"></i>
+                    Calle Hospital 278, Col. El Retiro
+                </p>
+                <p>C.P. 44280, Guadalajara, Jalisco, México</p>
+            </div>
+
+            <div class="flex justify-center">
+                <a href="tel:911" class="group relative inline-flex items-center gap-3 px-8 py-4 bg-red-600 text-white font-bold rounded-full shadow-lg hover:bg-red-700 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                    <span class="absolute w-full h-full bg-red-600 rounded-full animate-ping opacity-20"></span>
+                    <i class="fas fa-phone-alt text-lg group-hover:rotate-12 transition-transform"></i>
+                    <span class="text-lg">LLAMAR AL 911</span>
+                </a>
+            </div>
         </footer>
 
     </main>
@@ -230,6 +351,20 @@
         function closeModal() {
             document.getElementById('contact-modal').classList.add('hidden');
             document.body.style.overflow = 'auto';
+        }
+
+        // Script para desplegar la guía de emergencia
+        function toggleEmergency() {
+            const guide = document.getElementById('emergency-guide');
+            const icon = document.getElementById('chevron-icon');
+            
+            if (guide.classList.contains('hidden')) {
+                guide.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                guide.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
         }
     </script>
 </body>
