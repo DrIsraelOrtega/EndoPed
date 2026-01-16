@@ -13,7 +13,7 @@
         body {
             font-family: 'Reddit Sans', sans-serif;
             background-color: #f5f5f4;
-            overflow-x: hidden; /* Evita scroll horizontal por el movimiento del fondo */
+            overflow-x: hidden;
         }
 
         /* --- FONDO DINÁMICO (PARALLAX) --- */
@@ -21,17 +21,16 @@
             position: fixed;
             top: -10%;
             left: -10%;
-            width: 120%; /* Más grande que la pantalla para permitir movimiento */
+            width: 120%;
             height: 120%;
             z-index: -1;
             background: linear-gradient(to bottom, rgba(245, 245, 244, 0.6), rgba(245, 245, 244, 0.8)),
                         url('https://images.unsplash.com/photo-1569428034239-f9565e32e224?q=80&w=1979&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            transition: transform 0.1s ease-out; /* Suaviza el movimiento */
+            transition: transform 0.1s ease-out;
             will-change: transform;
         }
-        /* -------------------------------- */
 
         h1, h2, h3, .font-display {
             font-family: 'Lilita One', cursive;
@@ -110,7 +109,7 @@
             <span class="px-3 py-1 bg-stone-200/80 backdrop-blur-sm text-stone-700 rounded-full text-xs font-bold uppercase tracking-wide mb-4 inline-block font-sans">Menú Inteligente</span>
             <h2 class="text-5xl text-stone-800 mb-4 tracking-wide drop-shadow-sm">Selecciona tu Platillo</h2>
             <p class="text-lg text-stone-700 leading-relaxed mb-6 font-medium">
-                Herramientas de conteo de carbohidratos y simulación de impacto glucémico.
+                Explora opciones deliciosas diseñadas para mantenerte en control sin sacrificar el sabor.
             </p>
 
             <button onclick="toggleEmergency()" class="group inline-flex items-center gap-2 px-6 py-3 bg-red-50 text-red-700 font-bold rounded-full border border-red-200 hover:bg-red-100 transition-all shadow-sm">
@@ -124,12 +123,7 @@
             <div class="p-8">
                 <h3 class="text-3xl text-stone-800 mb-2">Protocolo de Acción Rápida</h3>
                 <p class="text-stone-500 text-sm mb-8">Identifica tu nivel de glucosa actual y sigue las instrucciones.</p>
-
                 <div class="relative h-12 w-full rounded-full glucose-gradient mb-4 shadow-inner">
-                    <div class="absolute top-0 bottom-0 border-r-2 border-white/50" style="left: 15%"></div>
-                    <div class="absolute top-0 bottom-0 border-r-2 border-white/50" style="left: 60%"></div>
-                    <div class="absolute top-0 bottom-0 border-r-2 border-white/50" style="left: 80%"></div>
-                    
                     <div class="absolute w-full -top-6 flex text-xs font-bold text-stone-400 font-sans">
                         <span style="width: 15%" class="text-center text-red-600">Bajo</span>
                         <span style="width: 45%" class="text-center text-emerald-600">Meta</span>
@@ -137,63 +131,14 @@
                         <span style="width: 20%" class="text-center text-red-800">Peligro</span>
                     </div>
                 </div>
-                
                 <div class="flex justify-between text-xs font-mono text-stone-400 mb-8 px-1">
-                    <span>0</span>
-                    <span>70</span>
-                    <span>180</span>
-                    <span>250</span>
-                    <span>400+</span>
+                    <span>0</span><span>70</span><span>180</span><span>250</span><span>400+</span>
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="bg-red-50 p-4 rounded-xl border border-red-100">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-arrow-down text-red-600 text-xl"></i>
-                            <h4 class="text-xl text-red-800">Hipoglucemia</h4>
-                        </div>
-                        <p class="text-xs text-red-700 font-bold mb-2 font-sans">&lt; 70 mg/dL</p>
-                        <ul class="text-xs text-stone-600 space-y-1 font-sans">
-                            <li>• Comer 15g azúcar rápida.</li>
-                            <li>• Esperar 15 min y medir.</li>
-                        </ul>
-                    </div>
-
-                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-check-circle text-emerald-600 text-xl"></i>
-                            <h4 class="text-xl text-emerald-800">En Rango</h4>
-                        </div>
-                        <p class="text-xs text-emerald-700 font-bold mb-2 font-sans">70 - 180 mg/dL</p>
-                        <ul class="text-xs text-stone-600 space-y-1 font-sans">
-                            <li>• Todo en orden.</li>
-                            <li>• Comer normal.</li>
-                        </ul>
-                    </div>
-
-                    <div class="bg-amber-50 p-4 rounded-xl border border-amber-100">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-arrow-up text-amber-600 text-xl"></i>
-                            <h4 class="text-xl text-amber-800">Elevado</h4>
-                        </div>
-                        <p class="text-xs text-amber-700 font-bold mb-2 font-sans">180 - 250 mg/dL</p>
-                        <ul class="text-xs text-stone-600 space-y-1 font-sans">
-                            <li>• Corregir con insulina.</li>
-                            <li>• Beber agua.</li>
-                        </ul>
-                    </div>
-
-                    <div class="bg-stone-800 p-4 rounded-xl border border-stone-900 text-white">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-ambulance text-red-500 text-xl animate-pulse"></i>
-                            <h4 class="text-xl text-red-400">Peligro</h4>
-                        </div>
-                        <p class="text-xs text-red-300 font-bold mb-2 font-sans">> 250 + Cetonas</p>
-                        <ul class="text-xs text-gray-300 space-y-1 font-sans">
-                            <li>• Checar cetonas.</li>
-                            <li>• <strong>IR A URGENCIAS</strong>.</li>
-                        </ul>
-                    </div>
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-100"><h4 class="text-red-800 font-bold">Hipoglucemia</h4><p class="text-xs text-red-600">&lt; 70 mg/dL: Comer 15g azúcar.</p></div>
+                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100"><h4 class="text-emerald-800 font-bold">En Rango</h4><p class="text-xs text-emerald-600">70-180 mg/dL: Todo OK.</p></div>
+                    <div class="bg-amber-50 p-4 rounded-xl border border-amber-100"><h4 class="text-amber-800 font-bold">Elevado</h4><p class="text-xs text-amber-600">180-250 mg/dL: Corregir + Agua.</p></div>
+                    <div class="bg-stone-800 p-4 rounded-xl border border-stone-900 text-white"><h4 class="text-red-400 font-bold">Peligro</h4><p class="text-xs text-gray-300">> 250 + Cetonas: Urgencias.</p></div>
                 </div>
             </div>
         </section>
@@ -202,20 +147,23 @@
             
             <a href="power_burger.html" class="block group">
                 <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100/50 hover:border-blue-300 transition-all">
-                    <div class="h-48 bg-blue-50/80 flex items-center justify-center group-hover:bg-blue-100/80 transition-colors">
+                    <div class="h-40 bg-blue-50/80 flex items-center justify-center group-hover:bg-blue-100/80 transition-colors">
                         <i class="fas fa-hamburger text-6xl text-blue-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md"></i>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
+                    <div class="p-5 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-2xl text-stone-800 group-hover:text-blue-600 transition-colors">Power Burger</h3>
                             <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded font-sans">COMIDA</span>
                         </div>
-                        <p class="text-stone-600 text-sm mb-4 line-clamp-2 font-medium">
-                            Hamburguesa con pan Thins. Retraso glucémico por carga proteica.
+                        <p class="text-stone-600 text-sm mb-4 leading-snug">
+                            ¡La burger que sí puedes comer! Olvídate de la culpa y aprende a dominar el efecto de la carne y el queso en tu glucosa.
                         </p>
-                        <div class="mt-auto flex gap-2 text-xs font-bold font-sans">
-                            <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">29.7g HC</span>
-                            <span class="bg-amber-50 text-amber-600 px-2 py-1 rounded">Grasa+</span>
+                        <div class="mt-auto bg-stone-50 rounded-lg p-2 border border-stone-100 space-y-1 text-sm">
+                            <div class="flex justify-between text-stone-500"><span>Proteína:</span> <span class="font-semibold">47g</span></div>
+                            <div class="flex justify-between text-stone-500"><span>Grasas:</span> <span class="font-semibold">33g</span></div>
+                            <div class="flex justify-between text-blue-600 font-bold bg-blue-50 px-2 rounded-md">
+                                <span>Carbohidratos:</span> <span>30g</span>
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -223,20 +171,23 @@
 
             <a href="pan_avena.html" class="block group">
                 <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100/50 hover:border-orange-300 transition-all">
-                    <div class="h-48 bg-orange-50/80 flex items-center justify-center group-hover:bg-orange-100/80 transition-colors">
+                    <div class="h-40 bg-orange-50/80 flex items-center justify-center group-hover:bg-orange-100/80 transition-colors">
                         <i class="fas fa-bread-slice text-6xl text-orange-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md"></i>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
+                    <div class="p-5 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-2xl text-stone-800 group-hover:text-orange-600 transition-colors">Pan de Avena</h3>
                             <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-1 rounded font-sans">DESAYUNO</span>
                         </div>
-                        <p class="text-stone-600 text-sm mb-4 line-clamp-2 font-medium">
-                            Huevo y aceite para una curva estable sin picos.
+                        <p class="text-stone-600 text-sm mb-4 leading-snug">
+                            ¿Harto de la avena aburrida? Este pan esponjoso te da energía estable toda la mañana sin esos picos locos.
                         </p>
-                        <div class="mt-auto flex gap-2 text-xs font-bold font-sans">
-                            <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">17g HC</span>
-                            <span class="bg-emerald-50 text-emerald-600 px-2 py-1 rounded">Estable</span>
+                        <div class="mt-auto bg-stone-50 rounded-lg p-2 border border-stone-100 space-y-1 text-sm">
+                            <div class="flex justify-between text-stone-500"><span>Proteína:</span> <span class="font-semibold">11g</span></div>
+                            <div class="flex justify-between text-stone-500"><span>Grasas:</span> <span class="font-semibold">12g</span></div>
+                            <div class="flex justify-between text-orange-600 font-bold bg-orange-50 px-2 rounded-md">
+                                <span>Carbohidratos:</span> <span>17g</span>
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -244,20 +195,23 @@
 
             <a href="bowl_inteligente.html" class="block group">
                 <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100/50 hover:border-emerald-300 transition-all">
-                    <div class="h-48 bg-emerald-50/80 flex items-center justify-center group-hover:bg-emerald-100/80 transition-colors">
+                    <div class="h-40 bg-emerald-50/80 flex items-center justify-center group-hover:bg-emerald-100/80 transition-colors">
                         <i class="fas fa-leaf text-6xl text-emerald-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md"></i>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
+                    <div class="p-5 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-2xl text-stone-800 group-hover:text-emerald-600 transition-colors">Bowl Inteligente</h3>
-                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded font-sans">SNACK</span>
+                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded font-sans">COLACIÓN</span>
                         </div>
-                        <p class="text-stone-600 text-sm mb-4 line-clamp-2 font-medium">
-                            Pepino, jícama y cacahuates. Volumen alto, impacto bajo.
+                        <p class="text-stone-600 text-sm mb-4 leading-snug">
+                            El hack definitivo para el hambre voraz. Volumen brutal, frescura máxima y tu glucosa ni se enterará.
                         </p>
-                        <div class="mt-auto flex gap-2 text-xs font-bold font-sans">
-                            <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">13g HC</span>
-                            <span class="bg-emerald-50 text-emerald-600 px-2 py-1 rounded">Fibra+</span>
+                        <div class="mt-auto bg-stone-50 rounded-lg p-2 border border-stone-100 space-y-1 text-sm">
+                            <div class="flex justify-between text-stone-500"><span>Proteína:</span> <span class="font-semibold">5g</span></div>
+                            <div class="flex justify-between text-stone-500"><span>Grasas:</span> <span class="font-semibold">8g</span></div>
+                            <div class="flex justify-between text-emerald-600 font-bold bg-emerald-50 px-2 rounded-md">
+                                <span>Carbohidratos:</span> <span>13g</span>
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -265,20 +219,23 @@
 
             <a href="lasagna_brocoli.html" class="block group">
                 <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100/50 hover:border-red-300 transition-all">
-                    <div class="h-48 bg-red-50/80 flex items-center justify-center group-hover:bg-red-100/80 transition-colors">
+                    <div class="h-40 bg-red-50/80 flex items-center justify-center group-hover:bg-red-100/80 transition-colors">
                         <i class="fas fa-layer-group text-6xl text-red-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md"></i>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
+                    <div class="p-5 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-2xl text-stone-800 group-hover:text-red-600 transition-colors">Lasagna Brócoli</h3>
                             <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded font-sans">COMIDA</span>
                         </div>
-                        <p class="text-stone-600 text-sm mb-4 line-clamp-2 font-medium">
-                            Sin pasta. Impacto lento dominado por la proteína de la carne.
+                        <p class="text-stone-600 text-sm mb-4 leading-snug">
+                            Sabor italiano, modo stealth. Todo el queso y la carne que amas, pero sin la pasta que dispara tus niveles.
                         </p>
-                        <div class="mt-auto flex gap-2 text-xs font-bold font-sans">
-                            <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">12.5g HC</span>
-                            <span class="bg-blue-50 text-blue-600 px-2 py-1 rounded">Prot+</span>
+                        <div class="mt-auto bg-stone-50 rounded-lg p-2 border border-stone-100 space-y-1 text-sm">
+                            <div class="flex justify-between text-stone-500"><span>Proteína:</span> <span class="font-semibold">43g</span></div>
+                            <div class="flex justify-between text-stone-500"><span>Grasas:</span> <span class="font-semibold">32g</span></div>
+                            <div class="flex justify-between text-red-600 font-bold bg-red-50 px-2 rounded-md">
+                                <span>Carbohidratos:</span> <span>12.5g</span>
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -286,20 +243,23 @@
 
             <a href="pizza_keto.html" class="block group">
                 <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100/50 hover:border-rose-300 transition-all">
-                    <div class="h-48 bg-rose-50/80 flex items-center justify-center group-hover:bg-rose-100/80 transition-colors">
+                    <div class="h-40 bg-rose-50/80 flex items-center justify-center group-hover:bg-rose-100/80 transition-colors">
                         <i class="fas fa-pizza-slice text-6xl text-rose-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md"></i>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
+                    <div class="p-5 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-2xl text-stone-800 group-hover:text-rose-600 transition-colors">Pizza Low-Carb</h3>
                             <span class="bg-rose-100 text-rose-700 text-xs font-bold px-2 py-1 rounded font-sans">CENA</span>
                         </div>
-                        <p class="text-stone-600 text-sm mb-4 line-clamp-2 font-medium">
-                            Harina de almendra. Sin pico inicial, subida tardía por grasas.
+                        <p class="text-stone-600 text-sm mb-4 leading-snug">
+                            Cena épica sin el drama del amanecer alto. Base de almendra crujiente que desafía las reglas de la pizza.
                         </p>
-                        <div class="mt-auto flex gap-2 text-xs font-bold font-sans">
-                            <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">6g HC</span>
-                            <span class="bg-rose-50 text-rose-600 px-2 py-1 rounded">Grasa+</span>
+                        <div class="mt-auto bg-stone-50 rounded-lg p-2 border border-stone-100 space-y-1 text-sm">
+                            <div class="flex justify-between text-stone-500"><span>Proteína:</span> <span class="font-semibold">32g</span></div>
+                            <div class="flex justify-between text-stone-500"><span>Grasas:</span> <span class="font-semibold">38g</span></div>
+                            <div class="flex justify-between text-rose-600 font-bold bg-rose-50 px-2 rounded-md">
+                                <span>Carbohidratos:</span> <span>6g</span>
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -307,20 +267,23 @@
 
             <a href="smoothie_cereales.html" class="block group">
                 <article class="rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100/50 hover:border-purple-300 transition-all">
-                    <div class="h-48 bg-purple-50/80 flex items-center justify-center group-hover:bg-purple-100/80 transition-colors">
+                    <div class="h-40 bg-purple-50/80 flex items-center justify-center group-hover:bg-purple-100/80 transition-colors">
                         <i class="fas fa-blender text-6xl text-purple-500 group-hover:scale-110 transition-transform duration-300 drop-shadow-md"></i>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
+                    <div class="p-5 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
                             <h3 class="text-2xl text-stone-800 group-hover:text-purple-600 transition-colors">Smoothie Cereales</h3>
-                            <span class="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-1 rounded font-sans">POSTRE</span>
+                            <span class="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-1 rounded font-sans">COLACIÓN</span>
                         </div>
-                        <p class="text-stone-600 text-sm mb-4 line-clamp-2 font-medium">
-                            Avena cruda y chía. Fibra viscosa para absorción lenta.
+                        <p class="text-stone-600 text-sm mb-4 leading-snug">
+                            Más que un licuado, es combustible inteligente. Cremoso, dulce y diseñado para que duermas tranquilo.
                         </p>
-                        <div class="mt-auto flex gap-2 text-xs font-bold font-sans">
-                            <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">28g HC</span>
-                            <span class="bg-emerald-50 text-emerald-600 px-2 py-1 rounded">Indice Bajo</span>
+                        <div class="mt-auto bg-stone-50 rounded-lg p-2 border border-stone-100 space-y-1 text-sm">
+                            <div class="flex justify-between text-stone-500"><span>Proteína:</span> <span class="font-semibold">18g</span></div>
+                            <div class="flex justify-between text-stone-500"><span>Grasas:</span> <span class="font-semibold">11g</span></div>
+                            <div class="flex justify-between text-purple-600 font-bold bg-purple-50 px-2 rounded-md">
+                                <span>Carbohidratos:</span> <span>28g</span>
+                            </div>
                         </div>
                     </div>
                 </article>
@@ -379,22 +342,16 @@
         }
 
         // --- SCRIPT PARA EL FONDO DINÁMICO (PARALLAX) ---
-        // Este script escucha el movimiento del mouse y el scroll para mover las nubes
         document.addEventListener('mousemove', (e) => {
             const bg = document.getElementById('dynamic-bg');
-            // Calcula cuánto mover el fondo (movimiento sutil invertido)
             const x = (window.innerWidth - e.pageX * 5) / 100;
             const y = (window.innerHeight - e.pageY * 5) / 100;
-            
-            // Aplica la transformación
             bg.style.transform = `translate(${x}px, ${y}px)`;
         });
 
-        // Añade un efecto suave al hacer scroll
         window.addEventListener('scroll', () => {
             const bg = document.getElementById('dynamic-bg');
             const scrollY = window.scrollY;
-            // Mueve el fondo ligeramente hacia arriba al scrollear hacia abajo
             bg.style.backgroundPosition = `center ${-scrollY * 0.2}px`;
         });
     </script>
