@@ -10,23 +10,28 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap');
         
-        /* --- AQUI ESTÁ EL CAMBIO DEL FONDO --- */
         body {
             font-family: 'Reddit Sans', sans-serif;
-            /* Eliminamos el color plano anterior */
-            /* background-color: #f5f5f4; */
-            
-            /* Agregamos un fondo de nubes realistas con una capa blanca semitransparente encima para legibilidad */
-            background: linear-gradient(to bottom, rgba(245, 245, 244, 0.7), rgba(245, 245, 244, 0.9)),
-                        url('https://images.unsplash.com/photo-1569428034239-f9565e32e224?q=80&w=1979&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-            background-size: cover;
-            background-position: center top;
-            background-repeat: no-repeat;
-            /* 'fixed' hace que el fondo se quede quieto mientras haces scroll (efecto moderno) */
-            background-attachment: fixed; 
-            min-height: 100vh;
+            background-color: #f5f5f4;
+            overflow-x: hidden; /* Evita scroll horizontal por el movimiento del fondo */
         }
-        /* ------------------------------------- */
+
+        /* --- FONDO DINÁMICO (PARALLAX) --- */
+        #dynamic-bg {
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 120%; /* Más grande que la pantalla para permitir movimiento */
+            height: 120%;
+            z-index: -1;
+            background: linear-gradient(to bottom, rgba(245, 245, 244, 0.6), rgba(245, 245, 244, 0.8)),
+                        url('https://images.unsplash.com/photo-1569428034239-f9565e32e224?q=80&w=1979&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.1s ease-out; /* Suaviza el movimiento */
+            will-change: transform;
+        }
+        /* -------------------------------- */
 
         h1, h2, h3, .font-display {
             font-family: 'Lilita One', cursive;
@@ -36,7 +41,6 @@
         .card-shadow {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            /* Añadí un fondo blanco explícito a las tarjetas para que resalten sobre las nubes */
             background-color: rgba(255, 255, 255, 0.95); 
             backdrop-filter: blur(5px);
         }
@@ -62,6 +66,8 @@
     </style>
 </head>
 <body class="text-stone-800 antialiased pb-12">
+
+    <div id="dynamic-bg"></div>
 
     <div id="contact-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay">
         <div class="bg-white rounded-2xl max-w-sm w-full p-8 text-center card-shadow border-t-8 border-stone-800">
@@ -371,6 +377,26 @@
                 icon.classList.remove('rotate-180');
             }
         }
+
+        // --- SCRIPT PARA EL FONDO DINÁMICO (PARALLAX) ---
+        // Este script escucha el movimiento del mouse y el scroll para mover las nubes
+        document.addEventListener('mousemove', (e) => {
+            const bg = document.getElementById('dynamic-bg');
+            // Calcula cuánto mover el fondo (movimiento sutil invertido)
+            const x = (window.innerWidth - e.pageX * 5) / 100;
+            const y = (window.innerHeight - e.pageY * 5) / 100;
+            
+            // Aplica la transformación
+            bg.style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        // Añade un efecto suave al hacer scroll
+        window.addEventListener('scroll', () => {
+            const bg = document.getElementById('dynamic-bg');
+            const scrollY = window.scrollY;
+            // Mueve el fondo ligeramente hacia arriba al scrollear hacia abajo
+            bg.style.backgroundPosition = `center ${-scrollY * 0.2}px`;
+        });
     </script>
 </body>
 </html>
