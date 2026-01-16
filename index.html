@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis Nutricional: Power Burger DT1</title>
+    <title>Portal Nutricional: Selección de Menú DT1</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
@@ -15,30 +14,14 @@
             background-color: #f5f5f4;
         }
 
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            height: 300px;
-            max-height: 400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
-        }
-
         .card-shadow {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .interactive-row:hover {
-            background-color: #f0fdf4;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
+        .card-shadow:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         /* Modal styling */
@@ -47,21 +30,16 @@
             backdrop-filter: blur(4px);
         }
     </style>
-    <!-- Chosen Palette: Warm Neutrals with functional accents -->
-    <!-- Application Structure Plan: Dashboard focusing on macronutrient delay logic for DT1. -->
-    <!-- Visualization & Content Choices: Stacked bars for breakdown, line chart for glucose simulation. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
 <body class="text-stone-800 antialiased pb-12">
 
-    <!-- Contact Modal -->
     <div id="contact-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-8 text-center card-shadow border-t-8 border-blue-600">
-            <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-600">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-8 text-center card-shadow border-t-8 border-stone-800">
+            <div class="w-20 h-20 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 text-stone-600">
                 <i class="fas fa-user-md text-4xl"></i>
             </div>
             <h3 class="text-xl font-bold text-stone-900 mb-1">Dra. Dulce Maria Granados</h3>
-            <p class="text-blue-600 font-semibold mb-1">Endocrinóloga Pediatra</p>
+            <p class="text-stone-600 font-semibold mb-1">Endocrinóloga Pediatra</p>
             <p class="text-stone-500 text-sm mb-6">HCG</p>
             <div class="space-y-3">
                 <button onclick="closeModal()" class="w-full py-3 bg-stone-900 text-white rounded-xl font-bold hover:bg-stone-800 transition">
@@ -74,182 +52,110 @@
     <header class="bg-white border-b border-stone-200 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="bg-blue-600 text-white p-2 rounded-lg">
-                    <i class="fas fa-hamburger text-xl"></i>
+                <div class="bg-stone-900 text-white p-2 rounded-lg">
+                    <i class="fas fa-utensils text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-stone-900 leading-tight">Power Burger <span class="text-blue-600">DT1</span></h1>
+                    <h1 class="text-xl font-bold text-stone-900 leading-tight">Portal Nutricional <span class="text-blue-600">DT1</span></h1>
                     <p class="text-xs text-stone-500">Israel Ortega Madrigal</p>
                 </div>
             </div>
             <nav class="hidden md:flex gap-6 text-sm">
-                <button onclick="scrollToSection('ingredients')" class="hover:text-blue-600 transition-colors">Ingredientes</button>
-                <button onclick="scrollToSection('clinical')" class="hover:text-blue-600 transition-colors">Análisis Clínico</button>
-                <button onclick="scrollToSection('strategy')" class="hover:text-blue-600 transition-colors font-semibold text-blue-600">Estrategia Insulina</button>
+                <button onclick="openModal()" class="text-blue-600 hover:text-blue-800 transition-colors font-semibold">
+                    <i class="fas fa-user-md mr-1"></i> Contacto Médico
+                </button>
             </nav>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 mt-8 space-y-12">
+    <main class="max-w-6xl mx-auto px-4 mt-12 space-y-10">
 
-        <section class="text-center max-w-3xl mx-auto mb-12">
-            <h2 class="text-3xl font-bold text-stone-800 mb-4">Más allá de contar Carbohidratos</h2>
+        <section class="text-center max-w-3xl mx-auto mb-16">
+            <span class="px-3 py-1 bg-stone-200 text-stone-700 rounded-full text-xs font-bold uppercase tracking-wide mb-4 inline-block">Menú Inteligente</span>
+            <h2 class="text-4xl font-bold text-stone-800 mb-6">Selecciona tu Platillo</h2>
             <p class="text-lg text-stone-600 leading-relaxed">
-                Para un adolescente con Diabetes Tipo 1, entender las proteínas y grasas es crucial. 
-                Aunque no suben el azúcar de inmediato, provocan una <strong>elevación tardía (3-5 horas)</strong>.
+                Herramientas de conteo de carbohidratos y simulación de impacto glucémico para optimizar la dosificación de insulina.
             </p>
         </section>
 
-        <!-- DASHBOARD -->
-        <section id="ingredients" class="bg-white rounded-2xl card-shadow overflow-hidden">
-            <div class="p-6 border-b border-stone-100 bg-stone-50">
-                <h3 class="text-xl font-bold flex items-center gap-2">
-                    <i class="fas fa-layer-group text-stone-400"></i> Desglose de Macronutrientes
-                </h3>
-            </div>
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8">
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
-                <div class="space-y-4">
-                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-semibold text-blue-800">TOTALES POR HAMBURGUESA</span>
+            <a href="power_burger.html" class="block group">
+                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100">
+                    <div class="h-48 bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                        <i class="fas fa-hamburger text-6xl text-blue-500 group-hover:scale-110 transition-transform duration-300"></i>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-stone-800">Power Burger DT1</h3>
+                            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded">COMIDA</span>
                         </div>
-                        <div class="grid grid-cols-3 gap-4 text-center">
-                            <div>
-                                <div class="text-2xl font-bold text-blue-600">46.7g</div>
-                                <div class="text-xs text-blue-800 uppercase font-semibold">Proteína</div>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-bold text-amber-500">33.4g</div>
-                                <div class="text-xs text-amber-700 uppercase font-semibold">Grasa</div>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-bold text-emerald-500">29.7g</div>
-                                <div class="text-xs text-emerald-700 uppercase font-semibold">Carbos</div>
-                            </div>
+                        <p class="text-stone-500 text-sm mb-4 line-clamp-2">
+                            Análisis de hamburguesa con pan Thins. Énfasis en el retraso glucémico por carga proteica y grasa.
+                        </p>
+                        
+                        <div class="mt-auto flex gap-2 text-xs font-semibold">
+                            <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">29.7g HC</span>
+                            <span class="bg-amber-50 text-amber-600 px-2 py-1 rounded">Grasa Alta</span>
                         </div>
                     </div>
+                </article>
+            </a>
 
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-stone-500 uppercase bg-stone-50 border-b">
-                                <tr>
-                                    <th class="px-4 py-3">Ingrediente</th>
-                                    <th class="px-2 py-3 text-right">Prot.</th>
-                                    <th class="px-2 py-3 text-right">Grasa</th>
-                                    <th class="px-2 py-3 text-right">HC</th>
-                                </tr>
-                            </thead>
-                            <tbody id="ingredients-table-body"></tbody>
-                        </table>
+            <a href="pan_avena.html" class="block group">
+                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100">
+                    <div class="h-48 bg-orange-50 flex items-center justify-center group-hover:bg-orange-100 transition-colors">
+                        <i class="fas fa-bread-slice text-6xl text-orange-500 group-hover:scale-110 transition-transform duration-300"></i>
                     </div>
-                </div>
-
-                <div class="flex flex-col justify-center bg-stone-50 rounded-xl p-4">
-                    <div class="chart-container">
-                        <canvas id="macrosBarChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CLINICAL ANALYSIS -->
-        <section id="clinical" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="md:col-span-2 bg-white rounded-2xl card-shadow p-6">
-                <div class="flex items-center gap-2 mb-4">
-                    <div class="p-2 bg-emerald-100 rounded-lg text-emerald-600">
-                        <i class="fas fa-stethoscope"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-stone-800">Impacto Clínico DT1</h3>
-                </div>
-                
-                <div class="space-y-6">
-                    <div class="border-l-4 border-blue-500 pl-4">
-                        <h4 class="font-bold text-blue-700 mb-1">Alta Saciedad (Proteína)</h4>
-                        <p class="text-stone-600 text-sm">Con casi 47g de proteína, cubre el 60-70% del requerimiento de una comida. Estimula la liberación de glucagón de forma controlada.</p>
-                    </div>
-                    <div class="border-l-4 border-amber-400 pl-4">
-                        <h4 class="font-bold text-amber-700 mb-1">Grasas y Vaciamiento Gástrico</h4>
-                        <p class="text-stone-600 text-sm">Las grasas retrasan la digestión, suavizando el pico inicial pero aumentando la resistencia a la insulina horas después.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl card-shadow p-6 flex flex-col items-center justify-center">
-                <div class="chart-container" style="height: 250px; max-height: 250px;">
-                    <canvas id="ratioChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- GLUCOSE SIMULATOR -->
-        <section class="bg-white rounded-2xl card-shadow p-6 border border-stone-200">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <div>
-                    <h3 class="text-xl font-bold flex items-center gap-2">
-                        <i class="fas fa-chart-line text-purple-500"></i> Simulación Glucémica
-                    </h3>
-                </div>
-                <div class="flex gap-2">
-                    <button id="btn-carb-only" class="px-4 py-2 text-xs font-semibold rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200">Solo Carbos</button>
-                    <button id="btn-power-burger" class="px-4 py-2 text-xs font-semibold rounded-full bg-purple-100 text-purple-700 border border-purple-200">Efecto Power Burger</button>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2">
-                    <div class="chart-container">
-                        <canvas id="glucoseSimChart"></canvas>
-                    </div>
-                </div>
-                <div class="bg-purple-50 p-5 rounded-xl border border-purple-100 flex flex-col justify-center">
-                    <h4 id="sim-title" class="text-lg font-bold text-purple-800 mb-2">Efecto Power Burger</h4>
-                    <p id="sim-desc" class="text-sm text-purple-900 mb-4">Visualiza el efecto de las Unidades de Grasa-Proteína (UGP) en la glucemia tardía.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- STRATEGY SECTION -->
-        <section id="strategy" class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl card-shadow p-8 text-white">
-            <div class="flex flex-col md:flex-row gap-8 items-center">
-                <div class="flex-1">
-                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-syringe mr-2"></i> Estrategia de Dosificación</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
-                            <h4 class="font-bold text-amber-300 mb-1">Bolo Dual / Extendido</h4>
-                            <p class="text-sm">Ideal para bombistas. Cubre el pico de carbos ahora y la resistencia grasa/proteína después.</p>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-stone-800">Pan de Avena</h3>
+                            <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-1 rounded">DESAYUNO</span>
                         </div>
-                        <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
-                            <h4 class="font-bold text-emerald-300 mb-1">Bolo Fraccionado</h4>
-                            <p class="text-sm">Para usuarios de pluma. Puede requerir una corrección o dosis adicional a las 2-3 horas.</p>
+                        <p class="text-stone-500 text-sm mb-4 line-clamp-2">
+                            Alternativa a la avena cocida. El huevo y el aceite crean una curva glucémica estable y sin picos.
+                        </p>
+                        
+                        <div class="mt-auto flex gap-2 text-xs font-semibold">
+                            <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">17g HC</span>
+                            <span class="bg-emerald-50 text-emerald-600 px-2 py-1 rounded">Estable</span>
                         </div>
                     </div>
-                </div>
-                <div class="w-full md:w-1/3 bg-white text-stone-800 p-6 rounded-xl shadow-lg">
-                    <h4 class="font-bold border-b pb-2 mb-4 text-center">Gestión Profesional</h4>
-                    <button onclick="openModal()" class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold text-sm hover:bg-blue-700 transition flex items-center justify-center gap-2">
-                        <i class="fas fa-user-md"></i> Consultar Endocrinólogo
-                    </button>
-                </div>
-            </div>
+                </article>
+            </a>
+
+            <a href="bowl_inteligente.html" class="block group">
+                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100">
+                    <div class="h-48 bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
+                        <i class="fas fa-leaf text-6xl text-emerald-500 group-hover:scale-110 transition-transform duration-300"></i>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-stone-800">Bowl Inteligente</h3>
+                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded">SNACK</span>
+                        </div>
+                        <p class="text-stone-500 text-sm mb-4 line-clamp-2">
+                            Pepino, jícama y cacahuates. Alto volumen gástrico con impacto mínimo en glucemia.
+                        </p>
+                        
+                        <div class="mt-auto flex gap-2 text-xs font-semibold">
+                            <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">13g HC</span>
+                            <span class="bg-emerald-50 text-emerald-600 px-2 py-1 rounded">Fibra+</span>
+                        </div>
+                    </div>
+                </article>
+            </a>
+
         </section>
+
+        <footer class="mt-16 text-center text-stone-400 text-sm">
+            <p class="mb-2">Proyecto de Análisis Nutricional para Diabetes Tipo 1</p>
+            <p>&copy; 2026 Israel Ortega Madrigal</p>
+        </footer>
 
     </main>
 
     <script>
-        const ingredientsData = [
-            { name: "Carne Res 90/10 (150g)", p: 30.0, f: 15.0, c: 0.0 },
-            { name: "Pan Thins (1 ud)", p: 4.0, f: 1.0, c: 24.0 },
-            { name: "Queso Cheddar (20g)", p: 5.0, f: 7.0, c: 0.4 },
-            { name: "Huevo plancha (1 pza)", p: 6.5, f: 5.0, c: 0.4 },
-            { name: "Aguacate (1/4 pza)", p: 0.7, f: 5.3, c: 2.9 },
-            { name: "Vegetales", p: 0.5, f: 0.1, c: 2.0 }
-        ];
-
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-        }
-
         function openModal() {
             document.getElementById('contact-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -258,82 +164,6 @@
         function closeModal() {
             document.getElementById('contact-modal').classList.add('hidden');
             document.body.style.overflow = 'auto';
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderTable();
-            initCharts();
-        });
-
-        function renderTable() {
-            const tbody = document.getElementById('ingredients-table-body');
-            ingredientsData.forEach(ing => {
-                const tr = document.createElement('tr');
-                tr.className = "border-b interactive-row";
-                tr.innerHTML = `
-                    <td class="px-4 py-3 font-medium text-stone-700">${ing.name}</td>
-                    <td class="px-2 py-3 text-right">${ing.p}</td>
-                    <td class="px-2 py-3 text-right">${ing.f}</td>
-                    <td class="px-2 py-3 text-right">${ing.c}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        let macroChart, ratioChart, simChart;
-        function initCharts() {
-            // Bar Chart
-            macroChart = new Chart(document.getElementById('macrosBarChart'), {
-                type: 'bar',
-                data: {
-                    labels: ingredientsData.map(i => i.name.split(' (')[0]),
-                    datasets: [
-                        { label: 'HC', data: ingredientsData.map(i => i.c), backgroundColor: '#34d399' },
-                        { label: 'Prot', data: ingredientsData.map(i => i.p), backgroundColor: '#3b82f6' },
-                        { label: 'Grasa', data: ingredientsData.map(i => i.f), backgroundColor: '#fbbf24' }
-                    ]
-                },
-                options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
-            });
-
-            // Ratio Chart
-            ratioChart = new Chart(document.getElementById('ratioChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['HC', 'Prot', 'Grasa'],
-                    datasets: [{ data: [29.7, 46.7, 33.4], backgroundColor: ['#34d399', '#3b82f6', '#fbbf24'] }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
-            });
-
-            // Sim Chart
-            simChart = new Chart(document.getElementById('glucoseSimChart'), {
-                type: 'line',
-                data: {
-                    labels: ['0h', '1h', '2h', '3h', '4h', '5h', '6h'],
-                    datasets: [{
-                        label: 'Glucosa',
-                        data: [100, 140, 150, 175, 180, 140, 110],
-                        borderColor: '#9333ea',
-                        backgroundColor: 'rgba(147, 51, 234, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 80, max: 200 } } }
-            });
-
-            document.getElementById('btn-carb-only').addEventListener('click', () => {
-                simChart.data.datasets[0].data = [100, 180, 110, 100, 100, 100, 100];
-                simChart.data.datasets[0].borderColor = '#34d399';
-                simChart.update();
-            });
-
-            document.getElementById('btn-power-burger').addEventListener('click', () => {
-                simChart.data.datasets[0].data = [100, 140, 150, 175, 180, 140, 110];
-                simChart.data.datasets[0].borderColor = '#9333ea';
-                simChart.update();
-            });
         }
     </script>
 </body>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Nutricional: Pan de Avena de Zanahoria DT1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            max-height: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .interactive-row:hover {
+            background-color: #fef3c7; /* Tono naranja suave para zanahoria */
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        /* Modal styling */
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="text-stone-800 antialiased pb-12">
+
+    <div id="contact-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-8 text-center card-shadow border-t-8 border-orange-500">
+            <div class="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-600">
+                <i class="fas fa-user-md text-4xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-stone-900 mb-1">Dra. Dulce Maria Granados</h3>
+            <p class="text-orange-600 font-semibold mb-1">Endocrinóloga Pediatra</p>
+            <p class="text-stone-500 text-sm mb-6">HCG</p>
+            <div class="space-y-3">
+                <button onclick="closeModal()" class="w-full py-3 bg-stone-900 text-white rounded-xl font-bold hover:bg-stone-800 transition">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="hover:bg-stone-100 p-2 rounded-lg transition">
+                    <i class="fas fa-arrow-left text-stone-400"></i>
+                </a>
+                <div class="bg-orange-500 text-white p-2 rounded-lg">
+                    <i class="fas fa-carrot text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-stone-900 leading-tight">Pan de Avena <span class="text-orange-600">DT1</span></h1>
+                    <p class="text-xs text-stone-500">Dra. Meztli Sofía García Ruvalcaba PreMIP</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex gap-6 text-sm">
+                <button onclick="scrollToSection('ingredients')" class="hover:text-orange-600 transition-colors">Ingredientes</button>
+                <button onclick="scrollToSection('clinical')" class="hover:text-orange-600 transition-colors">Análisis Clínico</button>
+                <button onclick="scrollToSection('strategy')" class="hover:text-orange-600 transition-colors font-semibold text-orange-600">Estrategia Insulina</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8 space-y-12">
+
+        <section class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-3xl font-bold text-stone-800 mb-4">Desayuno de Bajo Impacto</h2>
+            <p class="text-lg text-stone-600 leading-relaxed">
+                Una opción rica en fibra y grasas saludables. Con solo <strong>17g de carbohidratos</strong>, este pan ofrece una glucemia mucho más estable que la avena cocida tradicional gracias al huevo y el aceite.
+            </p>
+        </section>
+
+        <section id="ingredients" class="bg-white rounded-2xl card-shadow overflow-hidden">
+            <div class="p-6 border-b border-stone-100 bg-stone-50">
+                <h3 class="text-xl font-bold flex items-center gap-2">
+                    <i class="fas fa-layer-group text-stone-400"></i> Desglose Nutricional
+                </h3>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
+                <div class="space-y-4">
+                    <div class="bg-orange-50 p-4 rounded-xl border border-orange-100">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold text-orange-800">TOTALES (Aprox)</span>
+                            <span class="text-xs font-bold bg-white text-orange-600 px-2 py-1 rounded border border-orange-200">198 Kcal</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div>
+                                <div class="text-2xl font-bold text-blue-600">10.5g</div>
+                                <div class="text-xs text-blue-800 uppercase font-semibold">Proteína</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-amber-500">12.1g</div>
+                                <div class="text-xs text-amber-700 uppercase font-semibold">Grasa</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-emerald-500">17.0g</div>
+                                <div class="text-xs text-emerald-700 uppercase font-semibold">Carbos</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-stone-500 uppercase bg-stone-50 border-b">
+                                <tr>
+                                    <th class="px-4 py-3">Ingrediente</th>
+                                    <th class="px-2 py-3 text-right">Kcal</th>
+                                    <th class="px-2 py-3 text-right">HC</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ingredients-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="flex flex-col justify-center bg-stone-50 rounded-xl p-4">
+                    <div class="chart-container">
+                        <canvas id="macrosBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="clinical" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2 bg-white rounded-2xl card-shadow p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="p-2 bg-orange-100 rounded-lg text-orange-600">
+                        <i class="fas fa-notes-medical"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-stone-800">Análisis Clínico DT1</h3>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="border-l-4 border-emerald-500 pl-4">
+                        <h4 class="font-bold text-emerald-700 mb-1">Fibra Amortiguadora</h4>
+                        <p class="text-stone-600 text-sm">
+                            La avena cruda y la zanahoria rallada aportan fibra intacta. Esto crea una matriz viscosa en el estómago que ralentiza la absorción de los 17g de carbohidratos, evitando picos verticales.
+                        </p>
+                    </div>
+                    <div class="border-l-4 border-amber-400 pl-4">
+                        <h4 class="font-bold text-amber-700 mb-1">Efecto Grasa/Proteína (Huevo + Aceite)</h4>
+                        <p class="text-stone-600 text-sm">
+                            La adición de un huevo entero y una cucharadita de aceite añade ~12g de grasa. Esto es suficiente para reducir el índice glucémico global, pero generalmente no requiere un bolo extendido agresivo (a diferencia de una pizza o hamburguesa) debido a la baja carga total de carbohidratos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl card-shadow p-6 flex flex-col items-center justify-center">
+                <div class="chart-container" style="height: 250px; max-height: 250px;">
+                    <canvas id="ratioChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-2xl card-shadow p-6 border border-stone-200">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                    <h3 class="text-xl font-bold flex items-center gap-2">
+                        <i class="fas fa-wave-square text-orange-500"></i> Simulación Postprandial
+                    </h3>
+                </div>
+                <div class="flex gap-2">
+                    <button id="btn-avena-trad" class="px-4 py-2 text-xs font-semibold rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200">Avena Cocida (Solo)</button>
+                    <button id="btn-pan-zanahoria" class="px-4 py-2 text-xs font-semibold rounded-full bg-orange-100 text-orange-700 border border-orange-200">Pan Zanahoria (Completo)</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    <div class="chart-container">
+                        <canvas id="glucoseSimChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-orange-50 p-5 rounded-xl border border-orange-100 flex flex-col justify-center">
+                    <h4 id="sim-title" class="text-lg font-bold text-orange-800 mb-2">Curva Estable</h4>
+                    <p id="sim-desc" class="text-sm text-orange-900 mb-4">
+                        Observa cómo la proteína del huevo y la grasa del aceite "aplanan" la curva comparado con comer avena sola con agua.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="strategy" class="bg-gradient-to-br from-stone-800 to-stone-900 rounded-2xl card-shadow p-8 text-white">
+            <div class="flex flex-col md:flex-row gap-8 items-center">
+                <div class="flex-1">
+                    <h2 class="text-2xl font-bold mb-4"><i class="fas fa-calculator mr-2"></i> Estrategia Sugerida</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
+                            <h4 class="font-bold text-orange-300 mb-1">Pre-bolo Corto</h4>
+                            <p class="text-sm">Debido a la grasa y fibra, 10-15 minutos de pre-bolo suelen ser suficientes. No requiere tanta anticipación como la fruta o el jugo.</p>
+                        </div>
+                        <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
+                            <h4 class="font-bold text-emerald-300 mb-1">Ratio Conservador</h4>
+                            <p class="text-sm">Al tener solo 17g HC, el error de cálculo es mínimo. Es un desayuno seguro para días de glucemias inestables.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/3 bg-white text-stone-800 p-6 rounded-xl shadow-lg">
+                    <h4 class="font-bold border-b pb-2 mb-4 text-center">Consultar Experto</h4>
+                    <button onclick="openModal()" class="w-full py-3 bg-orange-600 text-white rounded-xl font-bold text-sm hover:bg-orange-700 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-user-md"></i> Contactar Dra. Granados
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Datos extraídos de la imagen y completados con valores estándar USDA para Prot/Grasa
+        const ingredientsData = [
+            { name: "Avena Cruda (1/3 taza)", kcal: 68, hc: 15, p: 4.0, f: 2.0 },
+            { name: "Zanahoria (1/2 taza)", kcal: 12, hc: 2, p: 0.5, f: 0.1 },
+            { name: "Huevo (1 pieza)", kcal: 73, hc: 0, p: 6.0, f: 5.0 },
+            { name: "Aceite (1 cdita)", kcal: 45, hc: 0, p: 0.0, f: 5.0 }
+        ];
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openModal() {
+            document.getElementById('contact-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('contact-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable();
+            initCharts();
+        });
+
+        function renderTable() {
+            const tbody = document.getElementById('ingredients-table-body');
+            ingredientsData.forEach(ing => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b interactive-row";
+                tr.innerHTML = `
+                    <td class="px-4 py-3 font-medium text-stone-700">${ing.name}</td>
+                    <td class="px-2 py-3 text-right">${ing.kcal}</td>
+                    <td class="px-2 py-3 text-right font-bold text-emerald-600">${ing.hc}g</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        let macroChart, ratioChart, simChart;
+        function initCharts() {
+            // Bar Chart
+            macroChart = new Chart(document.getElementById('macrosBarChart'), {
+                type: 'bar',
+                data: {
+                    labels: ingredientsData.map(i => i.name.split(' (')[0]),
+                    datasets: [
+                        { label: 'HC', data: ingredientsData.map(i => i.hc), backgroundColor: '#10b981' }, // Emerald
+                        { label: 'Prot', data: ingredientsData.map(i => i.p), backgroundColor: '#3b82f6' }, // Blue
+                        { label: 'Grasa', data: ingredientsData.map(i => i.f), backgroundColor: '#f59e0b' } // Amber
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
+            });
+
+            // Ratio Chart (Distribución Calórica Aprox)
+            ratioChart = new Chart(document.getElementById('ratioChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['HC', 'Prot', 'Grasa'],
+                    datasets: [{ 
+                        data: [17, 10.5, 12.1], 
+                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b'] 
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
+            });
+
+            // Sim Chart
+            const ctxSim = document.getElementById('glucoseSimChart').getContext('2d');
+            simChart = new Chart(ctxSim, {
+                type: 'line',
+                data: {
+                    labels: ['0h', '1h', '2h', '3h', '4h'],
+                    datasets: [{
+                        label: 'Glucosa (mg/dL)',
+                        data: [100, 135, 120, 105, 100], // Curva Pan Zanahoria (Estable)
+                        borderColor: '#ea580c', // Orange 600
+                        backgroundColor: 'rgba(234, 88, 12, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { y: { min: 70, max: 200 } } 
+                }
+            });
+
+            // Interactive Buttons for Simulation
+            document.getElementById('btn-avena-trad').addEventListener('click', () => {
+                simChart.data.datasets[0].data = [100, 180, 110, 85, 95]; // Pico rápido y bajada (posible hipo reactiva)
+                simChart.data.datasets[0].borderColor = '#ef4444'; // Red for danger/spike
+                simChart.data.datasets[0].backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                simChart.data.datasets[0].label = "Avena sola (Pico rápido)";
+                simChart.update();
+                document.getElementById('sim-title').innerText = "Efecto Avena Sola";
+                document.getElementById('sim-desc').innerText = "Sin la grasa del huevo/aceite, la avena se absorbe rápido generando un pico agudo.";
+            });
+
+            document.getElementById('btn-pan-zanahoria').addEventListener('click', () => {
+                simChart.data.datasets[0].data = [100, 135, 120, 105, 100];
+                simChart.data.datasets[0].borderColor = '#ea580c';
+                simChart.data.datasets[0].backgroundColor = 'rgba(234, 88, 12, 0.1)';
+                simChart.data.datasets[0].label = "Pan Zanahoria (Estable)";
+                simChart.update();
+                document.getElementById('sim-title').innerText = "Curva Estable";
+                document.getElementById('sim-desc').innerText = "Observa cómo la proteína del huevo y la grasa del aceite 'aplanan' la curva.";
+            });
+        }
+    </script>
+</body>
+</html>
