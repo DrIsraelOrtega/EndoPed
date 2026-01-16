@@ -7,13 +7,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+        /* IMPORTACIÓN DE TUS NUEVAS FUENTES */
+        @import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap');
         
+        /* APLICACIÓN DE FUENTES */
         body {
-            font-family: "Reddit Sans", sans-serif;
+            font-family: 'Reddit Sans', sans-serif; /* Texto general moderno y legible */
             background-color: #f5f5f4;
         }
 
+        h1, h2, h3, .font-display {
+            font-family: 'Lilita One', cursive; /* Títulos con impacto estilo "Gamer" */
+            letter-spacing: 0.05em; /* Un poco de espacio para que respire */
+        }
+
+        /* Ajustes de tarjetas y utilidades */
         .card-shadow {
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -24,13 +32,11 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        /* Modal styling */
         .modal-overlay {
             background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
         }
 
-        /* Gradient para la barra de glucosa */
         .glucose-gradient {
             background: linear-gradient(90deg, 
                 #ef4444 0%,    /* Rojo Hipo */
@@ -51,7 +57,7 @@
             <div class="w-20 h-20 bg-stone-100 rounded-full flex items-center justify-center mx-auto mb-4 text-stone-600">
                 <i class="fas fa-user-md text-4xl"></i>
             </div>
-            <h3 class="text-xl font-bold text-stone-900 mb-1">Dra. Dulce Maria Granados</h3>
+            <h3 class="text-2xl text-stone-900 mb-1">Dra. Dulce Maria Granados</h3>
             <p class="text-stone-600 font-semibold mb-1">Endocrinóloga Pediatra</p>
             <p class="text-stone-500 text-sm mb-6">HCG</p>
             <div class="space-y-3">
@@ -69,12 +75,12 @@
                     <i class="fas fa-utensils text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-stone-900 leading-tight">Portal Nutricional <span class="text-blue-600">DT1</span></h1>
-                    <p class="text-xs text-stone-500">Hospital Civil de Guadalajara, Fray Antonio Alcalde</p>
+                    <h1 class="text-2xl text-stone-900 leading-tight">Portal Nutricional <span class="text-blue-600">DT1</span></h1>
+                    <p class="text-xs text-stone-500 font-sans">Hospital Civil de Guadalajara, Fray Antonio Alcalde</p>
                 </div>
             </div>
             <nav class="hidden md:flex gap-6 text-sm">
-                <button onclick="openModal()" class="text-blue-600 hover:text-blue-800 transition-colors font-semibold">
+                <button onclick="openModal()" class="text-blue-600 hover:text-blue-800 transition-colors font-bold">
                     <i class="fas fa-user-md mr-1"></i> Contacto Médico
                 </button>
             </nav>
@@ -84,30 +90,30 @@
     <main class="max-w-6xl mx-auto px-4 mt-12 space-y-10">
 
         <section class="text-center max-w-3xl mx-auto mb-10">
-            <span class="px-3 py-1 bg-stone-200 text-stone-700 rounded-full text-xs font-bold uppercase tracking-wide mb-4 inline-block">Menú Inteligente</span>
-            <h2 class="text-4xl font-bold text-stone-800 mb-4">Selecciona tu Platillo</h2>
+            <span class="px-3 py-1 bg-stone-200 text-stone-700 rounded-full text-xs font-bold uppercase tracking-wide mb-4 inline-block font-sans">Menú Inteligente</span>
+            <h2 class="text-5xl text-stone-800 mb-4 tracking-wide">Selecciona tu Platillo</h2>
             <p class="text-lg text-stone-600 leading-relaxed mb-6">
                 Herramientas de conteo de carbohidratos y simulación de impacto glucémico.
             </p>
 
             <button onclick="toggleEmergency()" class="group inline-flex items-center gap-2 px-6 py-3 bg-red-50 text-red-700 font-bold rounded-full border border-red-200 hover:bg-red-100 transition-all shadow-sm">
                 <i class="fas fa-exclamation-triangle text-red-500 animate-pulse"></i>
-                🆘 Semáforo de Alerta: ¿Cuándo actuar?
+                <span class="font-display text-lg">🆘 Semáforo de Alerta</span>
                 <i id="chevron-icon" class="fas fa-chevron-down text-sm transition-transform duration-300"></i>
             </button>
         </section>
 
         <section id="emergency-guide" class="hidden max-w-4xl mx-auto mb-16 bg-white rounded-2xl border-l-8 border-red-500 card-shadow overflow-hidden transition-all duration-500">
             <div class="p-8">
-                <h3 class="text-2xl font-bold text-stone-800 mb-2">Protocolo de Acción Rápida</h3>
-                <p class="text-stone-500 text-sm mb-8">Identifica tu nivel de glucosa actual y sigue las instrucciones. Ante la duda, contacta a urgencias.</p>
+                <h3 class="text-3xl text-stone-800 mb-2">Protocolo de Acción Rápida</h3>
+                <p class="text-stone-500 text-sm mb-8">Identifica tu nivel de glucosa actual y sigue las instrucciones.</p>
 
                 <div class="relative h-12 w-full rounded-full glucose-gradient mb-4 shadow-inner">
                     <div class="absolute top-0 bottom-0 border-r-2 border-white/50" style="left: 15%"></div>
                     <div class="absolute top-0 bottom-0 border-r-2 border-white/50" style="left: 60%"></div>
                     <div class="absolute top-0 bottom-0 border-r-2 border-white/50" style="left: 80%"></div>
                     
-                    <div class="absolute w-full -top-6 flex text-xs font-bold text-stone-400">
+                    <div class="absolute w-full -top-6 flex text-xs font-bold text-stone-400 font-sans">
                         <span style="width: 15%" class="text-center text-red-600">Bajo</span>
                         <span style="width: 45%" class="text-center text-emerald-600">Meta</span>
                         <span style="width: 20%" class="text-center text-amber-600">Alto</span>
@@ -124,58 +130,53 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    
                     <div class="bg-red-50 p-4 rounded-xl border border-red-100">
                         <div class="flex items-center gap-2 mb-2">
                             <i class="fas fa-arrow-down text-red-600 text-xl"></i>
-                            <h4 class="font-bold text-red-800 text-sm">Menos de 70 mg/dL</h4>
+                            <h4 class="text-xl text-red-800">Hipoglucemia</h4>
                         </div>
-                        <p class="text-xs text-red-700 font-semibold mb-2">HIPOGLUCEMIA</p>
-                        <ul class="text-xs text-stone-600 space-y-1">
-                            <li>• Comer 15g carbohidratos rápidos (Jugo, Azúcar).</li>
+                        <p class="text-xs text-red-700 font-bold mb-2 font-sans">&lt; 70 mg/dL</p>
+                        <ul class="text-xs text-stone-600 space-y-1 font-sans">
+                            <li>• Comer 15g azúcar rápida.</li>
                             <li>• Esperar 15 min y medir.</li>
-                            <li>• Si sigue bajo, repetir.</li>
                         </ul>
                     </div>
 
                     <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
                         <div class="flex items-center gap-2 mb-2">
                             <i class="fas fa-check-circle text-emerald-600 text-xl"></i>
-                            <h4 class="font-bold text-emerald-800 text-sm">70 - 180 mg/dL</h4>
+                            <h4 class="text-xl text-emerald-800">En Rango</h4>
                         </div>
-                        <p class="text-xs text-emerald-700 font-semibold mb-2">RANGO META</p>
-                        <ul class="text-xs text-stone-600 space-y-1">
-                            <li>• Mantener monitoreo habitual.</li>
-                            <li>• Proceder con la comida planificada.</li>
+                        <p class="text-xs text-emerald-700 font-bold mb-2 font-sans">70 - 180 mg/dL</p>
+                        <ul class="text-xs text-stone-600 space-y-1 font-sans">
+                            <li>• Todo en orden.</li>
+                            <li>• Comer normal.</li>
                         </ul>
                     </div>
 
                     <div class="bg-amber-50 p-4 rounded-xl border border-amber-100">
                         <div class="flex items-center gap-2 mb-2">
                             <i class="fas fa-arrow-up text-amber-600 text-xl"></i>
-                            <h4 class="font-bold text-amber-800 text-sm">180 - 250 mg/dL</h4>
+                            <h4 class="text-xl text-amber-800">Elevado</h4>
                         </div>
-                        <p class="text-xs text-amber-700 font-semibold mb-2">ELEVADO</p>
-                        <ul class="text-xs text-stone-600 space-y-1">
-                            <li>• Aplicar corrección de insulina según ratio.</li>
-                            <li>• Beber agua simple.</li>
-                            <li>• Retrasar comida 15 min.</li>
+                        <p class="text-xs text-amber-700 font-bold mb-2 font-sans">180 - 250 mg/dL</p>
+                        <ul class="text-xs text-stone-600 space-y-1 font-sans">
+                            <li>• Corregir con insulina.</li>
+                            <li>• Beber agua.</li>
                         </ul>
                     </div>
 
                     <div class="bg-stone-800 p-4 rounded-xl border border-stone-900 text-white">
                         <div class="flex items-center gap-2 mb-2">
                             <i class="fas fa-ambulance text-red-500 text-xl animate-pulse"></i>
-                            <h4 class="font-bold text-red-400 text-sm">Más de 250 + Cetonas</h4>
+                            <h4 class="text-xl text-red-400">Peligro</h4>
                         </div>
-                        <p class="text-xs text-red-300 font-semibold mb-2">PELIGRO CETOACIDOSIS</p>
-                        <ul class="text-xs text-gray-300 space-y-1">
-                            <li>• Checar cetonas en orina/sangre.</li>
-                            <li>• No hacer ejercicio.</li>
-                            <li>• <strong>IR A URGENCIAS</strong> si hay vómito o deshidratación.</li>
+                        <p class="text-xs text-red-300 font-bold mb-2 font-sans">> 250 + Cetonas</p>
+                        <ul class="text-xs text-gray-300 space-y-1 font-sans">
+                            <li>• Checar cetonas.</li>
+                            <li>• <strong>IR A URGENCIAS</strong>.</li>
                         </ul>
                     </div>
-
                 </div>
             </div>
         </section>
@@ -183,42 +184,40 @@
         <section class="grid grid-cols-1 md:grid-cols-3 gap-8">
             
             <a href="power_burger.html" class="block group">
-                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100">
+                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100 hover:border-blue-200 transition-colors">
                     <div class="h-48 bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
                         <i class="fas fa-hamburger text-6xl text-blue-500 group-hover:scale-110 transition-transform duration-300"></i>
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-stone-800">Power Burger DT1</h3>
-                            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded">COMIDA</span>
+                            <h3 class="text-2xl text-stone-800 group-hover:text-blue-600 transition-colors">Power Burger</h3>
+                            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded font-sans">COMIDA</span>
                         </div>
                         <p class="text-stone-500 text-sm mb-4 line-clamp-2">
-                            Análisis de hamburguesa con pan Thins. Énfasis en el retraso glucémico por carga proteica y grasa.
+                            Hamburguesa con pan Thins. Retraso glucémico por carga proteica.
                         </p>
-                        
-                        <div class="mt-auto flex gap-2 text-xs font-semibold">
+                        <div class="mt-auto flex gap-2 text-xs font-bold font-sans">
                             <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">29.7g HC</span>
-                            <span class="bg-amber-50 text-amber-600 px-2 py-1 rounded">Grasa Alta</span>
+                            <span class="bg-amber-50 text-amber-600 px-2 py-1 rounded">Grasa+</span>
                         </div>
                     </div>
                 </article>
             </a>
 
             <a href="pan_avena.html" class="block group">
-                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100">
+                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100 hover:border-orange-200 transition-colors">
                     <div class="h-48 bg-orange-50 flex items-center justify-center group-hover:bg-orange-100 transition-colors">
                         <i class="fas fa-bread-slice text-6xl text-orange-500 group-hover:scale-110 transition-transform duration-300"></i>
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-stone-800">Pan de Avena</h3>
-                            <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-1 rounded">DESAYUNO</span>
+                            <h3 class="text-2xl text-stone-800 group-hover:text-orange-600 transition-colors">Pan de Avena</h3>
+                            <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-1 rounded font-sans">DESAYUNO</span>
                         </div>
                         <p class="text-stone-500 text-sm mb-4 line-clamp-2">
-                            Alternativa a la avena cocida. El huevo y el aceite crean una curva glucémica estable.
+                            Huevo y aceite para una curva estable sin picos.
                         </p>
-                        
-                        <div class="mt-auto flex gap-2 text-xs font-semibold">
+                        <div class="mt-auto flex gap-2 text-xs font-bold font-sans">
                             <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">17g HC</span>
                             <span class="bg-emerald-50 text-emerald-600 px-2 py-1 rounded">Estable</span>
                         </div>
@@ -227,20 +226,19 @@
             </a>
 
             <a href="bowl_inteligente.html" class="block group">
-                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100">
+                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100 hover:border-emerald-200 transition-colors">
                     <div class="h-48 bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
                         <i class="fas fa-leaf text-6xl text-emerald-500 group-hover:scale-110 transition-transform duration-300"></i>
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-stone-800">Bowl Inteligente</h3>
-                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded">SNACK</span>
+                            <h3 class="text-2xl text-stone-800 group-hover:text-emerald-600 transition-colors">Bowl Inteligente</h3>
+                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded font-sans">SNACK</span>
                         </div>
                         <p class="text-stone-500 text-sm mb-4 line-clamp-2">
-                            Pepino, jícama y cacahuates. Alto volumen gástrico con impacto mínimo en glucemia.
+                            Pepino, jícama y cacahuates. Volumen alto, impacto bajo.
                         </p>
-                        
-                        <div class="mt-auto flex gap-2 text-xs font-semibold">
+                        <div class="mt-auto flex gap-2 text-xs font-bold font-sans">
                             <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">13g HC</span>
                             <span class="bg-emerald-50 text-emerald-600 px-2 py-1 rounded">Fibra+</span>
                         </div>
@@ -249,20 +247,19 @@
             </a>
 
             <a href="lasagna_brocoli.html" class="block group">
-                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100">
+                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100 hover:border-red-200 transition-colors">
                     <div class="h-48 bg-red-50 flex items-center justify-center group-hover:bg-red-100 transition-colors">
                         <i class="fas fa-layer-group text-6xl text-red-500 group-hover:scale-110 transition-transform duration-300"></i>
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-stone-800">Lasagna Brócoli</h3>
-                            <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded">COMIDA</span>
+                            <h3 class="text-2xl text-stone-800 group-hover:text-red-600 transition-colors">Lasagna Brócoli</h3>
+                            <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded font-sans">COMIDA</span>
                         </div>
                         <p class="text-stone-500 text-sm mb-4 line-clamp-2">
-                            Sustitución de pasta por brócoli. Impacto glucémico lento dominado por la proteína de la carne.
+                            Sin pasta. Impacto lento dominado por la proteína de la carne.
                         </p>
-                        
-                        <div class="mt-auto flex gap-2 text-xs font-semibold">
+                        <div class="mt-auto flex gap-2 text-xs font-bold font-sans">
                             <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">12.5g HC</span>
                             <span class="bg-blue-50 text-blue-600 px-2 py-1 rounded">Prot+</span>
                         </div>
@@ -271,20 +268,19 @@
             </a>
 
             <a href="pizza_keto.html" class="block group">
-                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100">
+                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100 hover:border-rose-200 transition-colors">
                     <div class="h-48 bg-rose-50 flex items-center justify-center group-hover:bg-rose-100 transition-colors">
                         <i class="fas fa-pizza-slice text-6xl text-rose-500 group-hover:scale-110 transition-transform duration-300"></i>
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-stone-800">Pizza Low-Carb</h3>
-                            <span class="bg-rose-100 text-rose-700 text-xs font-bold px-2 py-1 rounded">CENA</span>
+                            <h3 class="text-2xl text-stone-800 group-hover:text-rose-600 transition-colors">Pizza Low-Carb</h3>
+                            <span class="bg-rose-100 text-rose-700 text-xs font-bold px-2 py-1 rounded font-sans">CENA</span>
                         </div>
                         <p class="text-stone-500 text-sm mb-4 line-clamp-2">
-                            Base de harina de almendra y queso. Sin pico inicial, pero con subida tardía por grasas.
+                            Harina de almendra. Sin pico inicial, subida tardía por grasas.
                         </p>
-                        
-                        <div class="mt-auto flex gap-2 text-xs font-semibold">
+                        <div class="mt-auto flex gap-2 text-xs font-bold font-sans">
                             <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">6g HC</span>
                             <span class="bg-rose-50 text-rose-600 px-2 py-1 rounded">Grasa+</span>
                         </div>
@@ -293,20 +289,19 @@
             </a>
 
             <a href="smoothie_cereales.html" class="block group">
-                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100">
+                <article class="bg-white rounded-2xl card-shadow overflow-hidden h-full flex flex-col border border-stone-100 hover:border-purple-200 transition-colors">
                     <div class="h-48 bg-purple-50 flex items-center justify-center group-hover:bg-purple-100 transition-colors">
                         <i class="fas fa-blender text-6xl text-purple-500 group-hover:scale-110 transition-transform duration-300"></i>
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-stone-800">Smoothie Cereales</h3>
-                            <span class="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-1 rounded">POSTRE</span>
+                            <h3 class="text-2xl text-stone-800 group-hover:text-purple-600 transition-colors">Smoothie Cereales</h3>
+                            <span class="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-1 rounded font-sans">POSTRE</span>
                         </div>
                         <p class="text-stone-500 text-sm mb-4 line-clamp-2">
-                            Avena cruda, chía y frutos rojos. Fibra viscosa para absorción lenta y sostenida.
+                            Avena cruda y chía. Fibra viscosa para absorción lenta.
                         </p>
-                        
-                        <div class="mt-auto flex gap-2 text-xs font-semibold">
+                        <div class="mt-auto flex gap-2 text-xs font-bold font-sans">
                             <span class="bg-stone-100 text-stone-600 px-2 py-1 rounded">28g HC</span>
                             <span class="bg-emerald-50 text-emerald-600 px-2 py-1 rounded">Indice Bajo</span>
                         </div>
@@ -321,21 +316,21 @@
             <p class="mb-6">&copy; 2026 Dr. Israel Ortega Madrigal | Hospital Civil de Guadalajara</p>
 
             <div class="mb-8 flex flex-col items-center gap-1 text-stone-400">
-                <p class="font-bold text-stone-600 flex items-center gap-2">
+                <p class="font-bold text-stone-600 flex items-center gap-2 font-sans">
                     <i class="fas fa-hospital-alt"></i> Hospital Civil de Guadalajara Fray Antonio Alcalde
                 </p>
-                <p class="flex items-center gap-1">
+                <p class="flex items-center gap-1 font-sans">
                     <i class="fas fa-map-marker-alt text-stone-400"></i>
                     Calle Hospital 278, Col. El Retiro
                 </p>
-                <p>C.P. 44280, Guadalajara, Jalisco, México</p>
+                <p class="font-sans">C.P. 44280, Guadalajara, Jalisco, México</p>
             </div>
 
             <div class="flex justify-center">
                 <a href="tel:911" class="group relative inline-flex items-center gap-3 px-8 py-4 bg-red-600 text-white font-bold rounded-full shadow-lg hover:bg-red-700 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     <span class="absolute w-full h-full bg-red-600 rounded-full animate-ping opacity-20"></span>
                     <i class="fas fa-phone-alt text-lg group-hover:rotate-12 transition-transform"></i>
-                    <span class="text-lg">LLAMAR AL 911</span>
+                    <span class="text-xl font-display tracking-widest">LLAMAR AL 911</span>
                 </a>
             </div>
         </footer>
@@ -353,7 +348,6 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Script para desplegar la guía de emergencia
         function toggleEmergency() {
             const guide = document.getElementById('emergency-guide');
             const icon = document.getElementById('chevron-icon');
